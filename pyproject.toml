@@ -1,0 +1,20 @@
+[crested_myna]
+name = "crested_myna"
+version = "0.0.1"
+
+[tool.autopep8]
+max_line_length = 120
+in-place = true
+recursive = true
+aggressive = 3
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:crested_myna.version",
+]
+branch = "main"
+changelog_file = "CHANGELOG.md"
+upload_to_release = false
+upload_to_pypi = false
+remove_dist = false
+patch_without_tag = true
