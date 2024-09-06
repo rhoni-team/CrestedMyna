@@ -7,6 +7,7 @@ django-environ==0.11.2
 isort==5.13.2
 mccabe==0.7.0
 platformdirs==4.2.2
+psycopg2-binary==2.9.9
 pycodestyle==2.12.1
 pylint==3.2.7
 pylint-django==2.5.5
