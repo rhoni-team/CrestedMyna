@@ -1,0 +1,113 @@
+name: ci-cd
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  PG_HOST: localhost
+  PG_PORT: 5432
+
+jobs:
+  ci:
+    if: github.event_name == 'pull_request'
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    services:
+
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+          # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: venv-${{ runner.os }}-
+
+    - name: Build virtual environment if necessary
+      run: python -m venv ./.venv && . ./.venv/bin/activate &&
+           pip install --upgrade pip &&
+           pip install -r requirements.txt
+      if: steps.cache-venv.outputs.cache-hit != 'true'
+
+    - name: Run lint
+      run: |
+        make lint VENV_FOLDER=./.venv
+
+    - name: Run Tests
+      run: |
+        make test VENV_FOLDER=./.venv
+
+  cd:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    permissions:
+      id-token: write
+      contents: write
+
+    steps:
+    - name: Check-out repository
+      uses: actions/checkout@v3
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: venv-${{ runner.os }}-
+
+    - name: Build virtual environment if necessary
+      run: python -m venv ./.venv && . ./.venv/bin/activate &&
+           pip install --upgrade pip &&
+           pip install -r requirements.txt
+      if: steps.cache-venv.outputs.cache-hit != 'true'
+
+    - name: Semantic Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source ./.venv/bin/activate;
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        semantic-release version
+        semantic-release changelog
+        semantic-release publish
