@@ -2,7 +2,7 @@ SHELL := /bin/bash
 .ONESHELL:
 VENV_FOLDER = env
 DJANGO_PATH = crested_myna
-APP_DB = CrestedMyna
+APP_DB = app_db
 
 lint:
 	source $(VENV_FOLDER)/bin/activate;
