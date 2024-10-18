@@ -151,7 +151,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
+# Static file configuration
+STATIC_URL = '/static/'
+
+# Path where static files will be collected for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is where collectstatic will put files for production use
+
+# Directories to look for static files during development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # This should point to your development static folder
+]
+
+# Optional: Enable optimization for static files (production)
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
