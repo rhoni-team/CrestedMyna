@@ -164,3 +164,10 @@ cython_debug/
 #.idea/
 
 crested_myna/data_analysis/data/
+
+# static files
+crested_myna/staticfiles/
+crested_myna/media/
+
+# exclude mapping/static/mapping/
+!mapping/static/mapping/
