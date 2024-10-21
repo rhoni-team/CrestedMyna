@@ -153,8 +153,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is where collectstatic will put files for production use
 
 # Directories to look for static files during development
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # This should point to your development static folder
+STATICFILES_DIRS = [ 
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'mapping', 'static', 'mapping'),
 ]
 
 # Optional: Enable optimization for static files (production)
