@@ -56,14 +56,8 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'data_analysis',
+    'mapping'
 ]
-
-THIRD_APPS = [
-    'wagtail.contrib.settings',
-    'wagtail.contrib.modeladmin',
-    'wagtail.contrib.table_block',
-]
-
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS
 
