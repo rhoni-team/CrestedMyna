@@ -1,0 +1,67 @@
+services:
+  django_crested_myna:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: "django_crested_myna"
+    expose:
+      - "8000"
+    volumes:
+      - ./crested_myna:/crested_myna
+    command: gunicorn crested_myna.wsgi:application --bind 0.0.0.0:8000            
+    env_file:
+      - .env.prod
+    environment:
+      - DJANGO_ENV=production
+      - PG_HOST=db
+    networks:
+      cm_network:
+        ipv4_address: 172.18.0.10
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+  nginx-proxy:
+    container_name: nginx-proxy
+    build: ./nginx
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - django
+    volumes:
+      - ./crested_myna:/crested_myna
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - vhost:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./webroot:/var/www/certbot
+    restart: unless-stopped
+    networks:
+      cm_network:
+        ipv4_address: 172.18.0.10
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./webroot:/var/www/certbot
+    depends_on:
+      - nginx-proxy
+#    command: certonly --webroot --webroot-path=/var/www/certbot --non-interactive --email nataliamdenk11@gmail.com --agree-tos --no-eff-email -d appci.rhonidev.com
+    networks:
+      cm_network:
+        ipv4_address: 172.18.0.10
+volumes:
+  postgres_data:
+  certbot-etc:
+  certbot-var:
+  vhost:
+  webroot:
+networks:
+  cm_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
