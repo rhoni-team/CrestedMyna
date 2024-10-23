@@ -21,15 +21,35 @@ cd data_analysis
 mkdir data
 ```
 
-5. Copy the `crested_myna_records.csv` file to the `data` folder
+5. Copy the `crested_myna_records.csv` file to the `data` folder (they are in the private crested_myna_data repository)
 
-6. Run migrations
+6. Create a `.env.dev` file in the root folder and add the environment variables.
+
+```bash
+POSTGRES_DB="crested_myna"
+POSTGRES_USER="your_username"
+POSTGRES_PASSWORD="your_password"
+PG_HOST=127.0.0.1
+PG_PORT=5432
+DEBUG=true
+SECRET_KEY='django-insecure-something_random'
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
+DJANGO_CORS_ALLOWED_ORIGINS=http://localhost http://127.0.0.1
+```
+
+7. Create the database
+
+name: crested_myna
+username: your_username
+password: your_password
+
+8. Run migrations
 
 ```bash
 python manage.py migrate
 ```
 
-7. Populate the database by using a management command
+9. Populate the database by using a management command
 
 ```bash
 python manage.py populate_database_with_ebird_data
@@ -48,4 +68,4 @@ python manage.py runserver
 
 # Notes
 
-1. You are going to see the django welcome page.
+1. You are going to see the home page.
