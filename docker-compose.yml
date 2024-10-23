@@ -4,8 +4,8 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: "django_crested_myna"
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - ./crested_myna:/crested_myna
     command: gunicorn crested_myna.wsgi:application --bind 0.0.0.0:8000            
