@@ -40,12 +40,16 @@ DEBUG = os.getenv('DEBUG', 'true').lower() == 'true'
 print(f"DEBUG: {DEBUG}")
 print(f"Loading environment: {ENVIRONMENT}")
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(' ')
+CORS_ALLOWED_ORIGINS = os.getenv('DJANGO_CORS_ALLOWED_ORIGINS').split(' ')
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Application definition
 
 BASE_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,19 +60,14 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'data_analysis',
+    'mapping'
 ]
-
-THIRD_APPS = [
-    'wagtail.contrib.settings',
-    'wagtail.contrib.modeladmin',
-    'wagtail.contrib.table_block',
-]
-
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,7 +82,10 @@ ROOT_URLCONF = 'crested_myna.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'templates' ],
+        'DIRS': [ 
+            BASE_DIR / 'templates',
+            BASE_DIR / 'mapping/templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,9 +150,48 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
+# Static file configuration
+STATIC_URL = '/static/'
+
+# Path where static files will be collected for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is where collectstatic will put files for production use
+
+# Directories to look for static files during development
+STATICFILES_DIRS = [ 
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'mapping', 'static', 'mapping'),
+]
+
+# Optional: Enable optimization for static files (production)
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# production settings
+if ENVIRONMENT == 'production':
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    # SECURITY
+
+    # cookies
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
+
+    # subdomains
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    # ssl  ------ UNCOMMENT IN HTTPS
+    CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
+
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 10 # It will be blocked for 10 seconds.
+    SECURE_HSTS_PRELOAD = True
