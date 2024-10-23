@@ -174,22 +174,24 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # production settings
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+if ENVIRONMENT == 'production':
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# SECURITY
+    # SECURITY
 
-# cookies
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
+    # cookies
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
 
-# subdomains
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # subdomains
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-# ssl  ------ UNCOMMENT IN HTTPS
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
+    # ssl  ------ UNCOMMENT IN HTTPS
+    CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 10 # It will be blocked for 10 seconds.
-SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 10 # It will be blocked for 10 seconds.
+    SECURE_HSTS_PRELOAD = True
