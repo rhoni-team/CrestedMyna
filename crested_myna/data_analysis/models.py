@@ -3,6 +3,7 @@ from django.db import models
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class ACRecord(models.Model):
@@ -14,6 +15,7 @@ class ACRecord(models.Model):
                                              MaxValueValidator(90)])
     longitude = models.FloatField(validators=[MinValueValidator(-180), 
                                               MaxValueValidator(180)])
+    location = ArrayField(models.FloatField(), size=2, null=True, blank=True)
     country_code = models.CharField(max_length=2)
     country = models.CharField(max_length=150)
     state = models.CharField(max_length=150)
