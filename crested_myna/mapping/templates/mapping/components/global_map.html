@@ -1,0 +1,79 @@
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'mapping/css/leaflet/leaflet.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+{% endblock %}
+
+<div class="container p-3">
+    <div id="global-map" class="global-map"></div>
+</div>
+
+{% block js %}
+    <script src="{% static 'mapping/js/leaflet/leaflet.js' %}"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script type="module" src="{% static 'mapping/js/mapping/plot_points.js' %}"></script>
+    <script type="module">
+        import { getAllPoints } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
+        import { createMap, addTile, addRecordsMarkers, createMarkerGroup } from "{% static 'mapping/js/mapping/plot_points.js' %}";
+        {% comment %} var map = L.map('global-map').setView([0, 0], 2); {% endcomment %}
+
+        var baseMap = createMap('global-map', [0, 0], 1.8);
+
+        function createHeatmapLayer(data, map_element) {
+          // Convert data to heatmap format: [latitude, longitude, intensity]
+          const heatmapData = data.map(point => [point[0], point[1], 1]);
+      
+          // Create the heat layer
+          const heatLayer = L.heatLayer(heatmapData, {
+              radius: 20,    // Adjust the radius to control the spread
+              blur: 10,      // Blur level
+              maxZoom: 18,   // Max zoom level for the heat effect
+              max: 1.0,       // Maximum intensity
+              gradient: {
+                0.2: 'yellow', 
+                0.4: 'orange',    // Lighter red for lower intensities
+                0.65: 'darkred', // Darker red for medium intensities
+                1.0: 'red'   // Darkest red for highest intensities
+              }
+          });
+      
+          // Add to map
+          map_element.addLayer(heatLayer);
+          return heatLayer;
+      }
+
+        var marker_group = createMarkerGroup(baseMap);
+
+        addTile(baseMap);
+
+        {% comment %} L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map); {% endcomment %}
+
+        async function getRecords() {
+            // get geopoints cases from REST API
+            console.log("entra get records funcion")
+            try {
+              let response = await getAllPoints();
+              console.log("response in global map", response);
+              let geopoints = await response;
+              return geopoints
+            } catch(err) {
+              if (err.response) {
+                console.error('error: ', err.response.status);
+              }
+            }
+          }
+        
+        let records;
+        records = await getRecords();
+        createHeatmapLayer(records, baseMap);
+        baseMap.setZoom(2, { animate: true }); 
+        console.log("records in global map2", records);
+
+    </script>
+{% endblock %}
