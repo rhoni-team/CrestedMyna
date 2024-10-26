@@ -13,6 +13,9 @@
 <body>
     {% block content %}
     {% endblock %}
+    <script src="{% static 'mapping/js/jquery/jquery-3.7.1.js' %}"></script>
     <script src="{% static 'mapping/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    {% block js %}
+    {% endblock %}
 </body>
 </html>
