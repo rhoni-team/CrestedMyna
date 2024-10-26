@@ -23,6 +23,7 @@ class RecordsFromCsv():
         AC_data = AC_data.astype(object)
         AC_data = self.convert_nan_to_none(AC_data)
         AC_data = self.fill_year_from_date(AC_data)
+        AC_data = self.get_location_array(AC_data)
         return AC_data
 
     def convert_nan_to_none(self, in_df: pd.DataFrame):
@@ -39,6 +40,14 @@ class RecordsFromCsv():
         in_df['year'] = in_df['observation_date'].dt.year
         return in_df
 
+    def get_location_array(self, in_df: pd.DataFrame):
+        """
+        This method is used to get the location array from the dataframe.
+        """
+        in_df['location'] = in_df.apply(
+            lambda row: [row['latitude'], row['longitude']], axis=1)
+        return in_df
+    
     def get_rows_list(self):
         """
         This method is used to get the rows list from the csv file.
