@@ -2,7 +2,7 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
 from django.views.generic.base import TemplateView
-from data_analysis.models import ACRecord
+from data_loading.models import ACRecord
 
 
 class IndexTemplateView(TemplateView):
