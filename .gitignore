@@ -171,3 +171,6 @@ crested_myna/media/
 
 # exclude mapping/static/mapping/
 !mapping/static/mapping/
+
+# exclude ebird data
+!data_loading/data/ebird_data/
