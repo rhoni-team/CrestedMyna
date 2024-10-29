@@ -173,4 +173,4 @@ crested_myna/media/
 !mapping/static/mapping/
 
 # exclude ebird data
-/data_loading/data/ebird_data/crested_myna_records.csv
+crested_myna/data_loading/data/ebird_data/crested_myna_records.csv
