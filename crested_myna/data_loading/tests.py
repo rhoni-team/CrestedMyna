@@ -1,12 +1,12 @@
 """ Tests for the data_analysis app """
 from django.test import TestCase
 from pathlib import Path
-import data_analysis
+import data_loading
 from data_loading.read_data.read_world_shp import ReadWorldShp
+from mapping.views import GetCountriesPolygons
 
 
-
-WORLD_SHP_PATH = Path(data_analysis.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
+WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
 
 
 # Test the ReadWorldShp class
