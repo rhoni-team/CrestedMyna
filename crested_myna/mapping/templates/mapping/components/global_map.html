@@ -41,7 +41,19 @@
             }
           }
         
-        let records;
+          async function getPolygons() {
+            console.log("entra get polygons funcion")
+            try {
+              let response = await getCountriesPolygonsWithACRecords();
+              console.log("response contries", response);
+              let countries_polygons = await response;
+              return countries_polygons
+            } catch(err) {
+              if (err.response) {
+                console.error('error: ', err.response.status);
+              }
+            }
+          }
         records = await getRecords();
         createHeatmapLayer(records, baseMap);
         baseMap.setZoom(2, { animate: true }); 
