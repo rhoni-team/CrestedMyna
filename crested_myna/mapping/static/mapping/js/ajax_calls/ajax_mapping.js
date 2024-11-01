@@ -17,3 +17,21 @@ export function getAllPoints() {
         });
     });
 }
+
+export function getCountriesPolygonsWithACRecords() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/get-countries-polygons/',
+            type: "GET",
+            dataType: "json",
+            success: (data) => {
+                console.log("records in ajax", data.countries);
+                resolve(data.countries);  // Resolve the Promise with the data
+            },
+            error: (error) => {
+                console.log(error);
+                reject(error);  // Reject the Promise with the error
+            }
+        });
+    });
+}
