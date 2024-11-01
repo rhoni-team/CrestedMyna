@@ -48,7 +48,7 @@ class WorldBorder(models.Model):
                                              MaxValueValidator(90)])
     longitude = models.FloatField(validators=[MinValueValidator(-180), 
                                               MaxValueValidator(180)])
-
+    ac_count = models.IntegerField(null=True)
     geom = models.MultiPolygonField()
 
     def __str__(self):
