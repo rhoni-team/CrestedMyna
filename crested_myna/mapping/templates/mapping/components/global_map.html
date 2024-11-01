@@ -57,7 +57,11 @@
         records = await getRecords();
         createHeatmapLayer(records, baseMap);
         baseMap.setZoom(2, { animate: true }); 
-        console.log("records in global map2", records);
+
+        let polygons;
+        polygons = await getPolygons();
+        console.log(polygons);
+
 
     </script>
 {% endblock %}
