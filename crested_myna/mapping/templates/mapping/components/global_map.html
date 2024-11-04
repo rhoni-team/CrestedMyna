@@ -20,15 +20,16 @@
         import { getAllPoints, getCountriesPolygonsWithACRecords } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
         import { createMap, addTile, addRecordsMarkers, createMarkerGroup } from "{% static 'mapping/js/mapping/plot_points.js' %}";
         import { createHeatmapLayer } from "{% static 'mapping/js/mapping/heat_map.js' %}";
+        import { styleCountries } from "{% static 'mapping/js/mapping/country_polygons.js' %}";
 
         // create base map
-        var baseMap = createMap('global-map', [0, 0], 1.8);
+        var baseMap = createMap('global-map', [25, 0], 1.8);
 
         // add openstreetmap layer
         addTile(baseMap);
 
         // get geopoints cases from REST API
-        async function getRecords() {
+        {% comment %} async function getRecords() {
             console.log("entra get records funcion")
             try {
               let response = await getAllPoints();
@@ -39,12 +40,14 @@
                 console.error('error: ', err.response.status);
               }
             }
-          }
+          } {% endcomment %}
+
         
           async function getPolygons() {
             try {
               let response = await getCountriesPolygonsWithACRecords();
               let countries_polygons = await response;
+              console.log(countries_polygons)
               return countries_polygons
             } catch(err) {
               if (err.response) {
@@ -55,15 +58,15 @@
 
         let polygons;
         polygons = await getPolygons();
-        const polygonLayer = L.geoJson(JSON.parse(polygons));
+        const polygonLayer = L.geoJson(JSON.parse(polygons), {style: styleCountries});
+        baseMap.addLayer(polygonLayer);
         window.mapa = baseMap;
         let records;
-        records = await getRecords();
+        {% comment %} records = await getRecords();
         const heatLayer = createHeatmapLayer(records, baseMap);
-        baseMap.addLayer(polygonLayer);
         baseMap.addLayer(heatLayer);
         window.heatLayer = heatLayer;
-        baseMap.setZoom(2, { animate: true });
+        baseMap.setZoom(2, { animate: true }); {% endcomment %}
 
     </script>
 {% endblock %}
