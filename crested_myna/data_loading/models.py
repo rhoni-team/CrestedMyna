@@ -50,13 +50,22 @@ class Country(models.Model):
         """String representation of the Country model."""
         return self.name if self.name else "Unnamed Country"
 
+
+class CountryWithACRecord(models.Model):
+    """ Country model with only the countries that have AC records. """
+    name = models.CharField(max_length=120, null=True, default='Unnamed Country')
+    iso2 = models.CharField("2 Digit ISO", max_length=2, null=True, blank=True)
     latitude = models.FloatField(validators=[MinValueValidator(-90), 
-                                             MaxValueValidator(90)])
+                                             MaxValueValidator(90)],
+                                             null=True)
     longitude = models.FloatField(validators=[MinValueValidator(-180), 
-                                              MaxValueValidator(180)])
-    ac_count = models.IntegerField(null=True)
+                                              MaxValueValidator(180)],
+                                              null=True)
+    tot_birds_count = models.IntegerField(null=True, default=1)
+    tot_observations_events = models.IntegerField(null=True)
+    is_exotic = models.BooleanField(null=True)
     geom = models.MultiPolygonField()
 
     def __str__(self):
-        """String representation of the ACRecord model."""
+        """String representation of the CountryWithACRecord model."""
         return self.name
