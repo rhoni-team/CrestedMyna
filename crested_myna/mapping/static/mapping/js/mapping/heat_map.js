@@ -19,6 +19,5 @@ export function createHeatmapLayer(data, map_element) {
     });
 
     // Add to map
-    map_element.addLayer(heatLayer);
     return heatLayer;
 }
