@@ -7,7 +7,6 @@ export function getAllPoints() {
             type: "GET",
             dataType: "json",
             success: (data) => {
-                console.log("records in ajax", data.records);
                 resolve(data.records);  // Resolve the Promise with the data
             },
             error: (error) => {
@@ -25,7 +24,6 @@ export function getCountriesPolygonsWithACRecords() {
             type: "GET",
             dataType: "json",
             success: (data) => {
-                console.log("records in ajax", data.countries);
                 resolve(data.countries);  // Resolve the Promise with the data
             },
             error: (error) => {
