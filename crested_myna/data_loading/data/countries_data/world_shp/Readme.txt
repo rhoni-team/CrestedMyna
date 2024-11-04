@@ -1,70 +1,15 @@
-TM_WORLD_BORDERS-0.1.ZIP 
+World Bank Official Boundaries
 
-Provided by Bjorn Sandvik, thematicmapping.org
+Source: https://datacatalog.worldbank.org/search/dataset/0038272/World-Bank-Official-Boundaries
 
-Use this dataset with care, as several of the borders are disputed.
+World Bank-approved administrative boundaries (Admin 0) (and polygons) including international boundaries, disputed areas, 
+coastlines, lakes and a guide to help with their usage.
 
-The original shapefile (world_borders.zip, 3.2 MB) was downloaded from the Mapping Hacks website:
-http://www.mappinghacks.com/data/
+Data Access and Licensing
 
-The dataset was derived by Schuyler Erle from public domain sources.
-Sean Gilles did some clean up and made some enhancements.
+Classification: Public
+This dataset is classified as Public under the Access to Information Classification Policy.
+Users inside and outside the Bank can access this dataset.
 
-
-COLUMN		TYPE			DESCRIPTION
-
-Shape		Polygon			Country/area border as polygon(s)
-FIPS		String(2)		FIPS 10-4 Country Code
-ISO2		String(2)		ISO 3166-1 Alpha-2 Country Code
-ISO3		String(3)		ISO 3166-1 Alpha-3 Country Code
-UN		Short Integer(3)	ISO 3166-1 Numeric-3 Country Code 
-NAME		String(50)		Name of country/area
-AREA		Long Integer(7)		Land area, FAO Statistics (2002) 
-POP2005		Double(10,0)	 	Population, World Polulation Prospects (2005)
-REGION		Short Integer(3) 	Macro geographical (continental region), UN Statistics
-SUBREGION	Short Integer(3)	Geogrpahical sub-region, UN Statistics
-LON		FLOAT (7,3)		Longitude
-LAT		FLOAT (6,3)		Latitude
-
-
-CHANGELOG VERSION 0.3 - 30 July 2008
-
-- Corrected spelling mistake (United Arab Emirates)
-- Corrected population number for Japan
-- Adjusted long/lat values for India, Italy and United Kingdom
-
-
-CHANGELOG VERSION 0.2 - 1 April 2008
-
-- Made new ZIP archieves. No change in dataset.
-
-
-CHANGELOG VERSION 0.1 - 13 March 2008
-
-- Polygons representing each country were merged into one feature
-- Åland Islands was extracted from Finland
-- Hong Kong was extracted from China
-- Holy See (Vatican City) was added
-- Gaza Strip and West Bank was merged into "Occupied Palestinean Territory"
-- Saint-Barthelemy was extracted from Netherlands Antilles
-- Saint-Martin (Frensh part) was extracted from Guadeloupe
-- Svalbard and Jan Mayen was merged into "Svalbard and Jan Mayen Islands"
-- Timor-Leste was extracted from Indonesia
-- Juan De Nova Island was merged with "French Southern & Antarctic Land"
-- Baker Island, Howland Island, Jarvis Island, Johnston Atoll, Midway Islands
-  and Wake Island was merged into "United States Minor Outlying Islands"
-- Glorioso Islands, Parcel Islands, Spartly Islands was removed 
-  (almost uninhabited and missing ISO-3611-1 code)
-
-- Added ISO-3166-1 codes (alpha-2, alpha-3, numeric-3). Source:
-  https://www.cia.gov/library/publications/the-world-factbook/appendix/appendix-d.html
-  http://unstats.un.org/unsd/methods/m49/m49alpha.htm
-  http://www.fysh.org/~katie/development/geography.txt
-- AREA column has been replaced with data from UNdata:
-  Land area, 1000 hectares, 2002, FAO Statistics
-- POPULATION column (POP2005) has been replaced with data from UNdata:
-  Population, 2005, Medium variant, World Population Prospects: The 2006 Revision
-- Added region and sub-region codes from UN Statistics Division. Source:
-  http://unstats.un.org/unsd/methods/m49/m49regin.htm
-- Added LAT, LONG values for each country
-
+License: Creative Commons Attribution 4.0
+This dataset is licensed under Creative Commons Attribution 4.0
