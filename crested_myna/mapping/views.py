@@ -9,6 +9,7 @@ from django.core.serializers import serialize
 from data_loading.models import ACRecord
 from data_loading.models import WorldBorder
 
+import json
 
 class IndexTemplateView(TemplateView):
     """Loads index.html where the frontend is set
@@ -55,12 +56,23 @@ class GetCountriesPolygons(View):
     def serialize_countries_polygons_as_geojson(self, countries_polygons: List["WorldBorder"]) -> str:
         """Serialize countries polygons as geojson"""
         geojson = serialize('geojson', countries_polygons)
-        return geojson
+        
+        geojson_without_crs = json.loads(geojson)
+        geojson_without_crs.pop('crs', None)
+        geojson_without_crs = json.dumps(geojson_without_crs)
+
+        return geojson_without_crs
 
     def get(self, request):
-        """Get the countries polygons with AC records as geojson"""
-        countries = self.get_country_code_for_countries_with_ac_records()
-        countries_polygons = self.get_countries_polygons_with_ac_records(countries)
-        geojson_pol = self.serialize_countries_polygons_as_geojson(countries_polygons)
-        return JsonResponse({ "countries": geojson_pol})
+        """Get the countries polygons with AC records as geojson""" 
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        if is_ajax:
+            countries = self.get_country_code_for_countries_with_ac_records()
+            countries_polygons = self.get_countries_polygons_with_ac_records(countries)
+            geojson_pol = self.serialize_countries_polygons_as_geojson(countries_polygons)
+            response = JsonResponse({ "countries": geojson_pol})
+            return response
+        else:
+            return HttpResponseBadRequest('Invalid request')
     
