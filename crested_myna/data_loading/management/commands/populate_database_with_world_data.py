@@ -1,10 +1,10 @@
 """
-This module contains the command to populate the WorldBorder
+This module contains the command to populate the Country
 with the data from the world shapefile.
 """
 
 import os
-from data_loading.models import WorldBorder
+from data_loading.models import Country
 from data_loading.models import ACRecord
 from data_loading.load import run
 from django.core.management.base import BaseCommand, CommandError
@@ -15,10 +15,10 @@ directory = os.getcwd()
 
 class Command(BaseCommand):
     """
-    Command to populate the WorldBorder table with the data from the world shapefile.
+    Command to populate the Country table with the data from the world shapefile.
     """
 
-    help = "Populate WorldBorder table with world shapefile"
+    help = "Populate Country table with world shapefile"
 
     def handle(self, *args, **options):
         """
@@ -32,14 +32,14 @@ class Command(BaseCommand):
             # add ac_count to world shapefile
             ac_count_dict = self.get_ac_count_for_countries()
 
-            for country in WorldBorder.objects.all():
+            for country in Country.objects.all():
                 country.ac_count = ac_count_dict.get(country.iso2, 0)
                 country.save()
 
             self.stdout.write(self.style.SUCCESS('Successfully added ac_count to world shapefile'))
 
-        except WorldBorder.DoesNotExist:
-            raise CommandError('WorldBorder object does not exist')
+        except Country.DoesNotExist:
+            raise CommandError('Country object does not exist')
         
     def save_world_shp_in_database(self):
         """ Save the world shapefile in the database """

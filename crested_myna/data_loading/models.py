@@ -37,7 +37,7 @@ class ACRecord(models.Model):
         return f'{self.country_code} _ {self.year}'
 
 
-class WorldBorder(models.Model):
+class Country(models.Model):
     """
     Model for the world borders.
     """
