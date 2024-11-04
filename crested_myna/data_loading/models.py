@@ -42,9 +42,14 @@ class Country(models.Model):
     """
     Model for the world borders.
     """
-    name = models.CharField(max_length=50)
-    area = models.IntegerField()
-    iso2 = models.CharField("2 Digit ISO", max_length=2)
+    name = models.CharField(max_length=120, null=True, default='Unnamed Country')
+    iso2 = models.CharField("2 Digit ISO", max_length=2, null=True, blank=True)
+    geom = models.MultiPolygonField()
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.name if self.name else "Unnamed Country"
+
     latitude = models.FloatField(validators=[MinValueValidator(-90), 
                                              MaxValueValidator(90)])
     longitude = models.FloatField(validators=[MinValueValidator(-180), 
