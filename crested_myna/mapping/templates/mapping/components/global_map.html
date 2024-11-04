@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{% static 'mapping/css/leaflet/leaflet.css' %}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+
 {% endblock %}
 
 <div class="container p-3">
@@ -16,7 +17,7 @@
     <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
     <script type="module" src="{% static 'mapping/js/mapping/plot_points.js' %}"></script>
     <script type="module">
-        import { getAllPoints } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
+        import { getAllPoints, getCountriesPolygonsWithACRecords } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
         import { createMap, addTile, addRecordsMarkers, createMarkerGroup } from "{% static 'mapping/js/mapping/plot_points.js' %}";
         import { createHeatmapLayer } from "{% static 'mapping/js/mapping/heat_map.js' %}";
 
@@ -31,7 +32,6 @@
             console.log("entra get records funcion")
             try {
               let response = await getAllPoints();
-              console.log("response in global map", response);
               let geopoints = await response;
               return geopoints
             } catch(err) {
@@ -42,10 +42,8 @@
           }
         
           async function getPolygons() {
-            console.log("entra get polygons funcion")
             try {
               let response = await getCountriesPolygonsWithACRecords();
-              console.log("response contries", response);
               let countries_polygons = await response;
               return countries_polygons
             } catch(err) {
@@ -54,14 +52,18 @@
               }
             }
           }
-        records = await getRecords();
-        createHeatmapLayer(records, baseMap);
-        baseMap.setZoom(2, { animate: true }); 
 
         let polygons;
         polygons = await getPolygons();
-        console.log(polygons);
-
+        const polygonLayer = L.geoJson(JSON.parse(polygons));
+        window.mapa = baseMap;
+        let records;
+        records = await getRecords();
+        const heatLayer = createHeatmapLayer(records, baseMap);
+        baseMap.addLayer(polygonLayer);
+        baseMap.addLayer(heatLayer);
+        window.heatLayer = heatLayer;
+        baseMap.setZoom(2, { animate: true });
 
     </script>
 {% endblock %}
