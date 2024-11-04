@@ -11,16 +11,13 @@ import data_loading
 
 # map object with the selected columns
 worldborder_mapping = {
-    'iso2': 'ISO2',
-    'name': 'NAME',
-    'area': 'AREA',
-    'latitude': 'LAT',
-    'longitude': 'LON',
+    'iso2': 'ISO_A2',
+    'name': 'FORMAL_EN',
     'geom': 'MULTIPOLYGON',
 }
 
 # path to the world shapefile
-WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
+WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "WB_countries_Admin0_10m.shp"
 
 
 def run(verbose=True):
