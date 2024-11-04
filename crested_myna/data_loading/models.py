@@ -27,6 +27,7 @@ class ACRecord(models.Model):
     observation_count = models.IntegerField(null=True, blank=True)
     time_observations_started = models.TimeField(null=True)
     duration_minutes = models.IntegerField(null=True)
+    geom = models.PointField(null=True)
 
     class Meta:
         """Meta options for the ACRecord model."""
