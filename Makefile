@@ -6,7 +6,7 @@ APP_DB = app_db
 
 lint:
 	source $(VENV_FOLDER)/bin/activate;
-	pylint $(DJANGO_PATH)/backend $(DJANGO_PATH)/index_view $(DJANGO_PATH)/crested_myna || true
+	pylint $(DJANGO_PATH)/data_loading $(DJANGO_PATH)/mapping || true
 
 autopep:
 	source $(VENV_FOLDER)/bin/activate;
