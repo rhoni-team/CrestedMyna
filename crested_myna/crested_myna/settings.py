@@ -60,7 +60,7 @@ BASE_APPS = [
 ]
 
 LOCAL_APPS = [
-    'data_analysis',
+    # 'data_analysis',
     'data_loading',
     'mapping'
 ]
