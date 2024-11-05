@@ -19,7 +19,6 @@ services:
       - shared_network
     restart: unless-stopped
 volumes:
-  ./crested_myna:
   nginx_reverse_proxy_certbot-etc:
     external: true
   nginx_reverse_proxy_certbot-var:
