@@ -13,9 +13,9 @@ class ACRecord(models.Model):
     Model for the AC records.
     """
     checklist_id = models.CharField(max_length=100)
-    latitude = models.FloatField(validators=[MinValueValidator(-90), 
+    latitude = models.FloatField(validators=[MinValueValidator(-90),
                                              MaxValueValidator(90)])
-    longitude = models.FloatField(validators=[MinValueValidator(-180), 
+    longitude = models.FloatField(validators=[MinValueValidator(-180),
                                               MaxValueValidator(180)])
     location = ArrayField(models.FloatField(), size=2, null=True, blank=True)
     country_code = models.CharField(max_length=2)
@@ -55,12 +55,12 @@ class CountryWithACRecord(models.Model):
     """ Country model with only the countries that have AC records. """
     name = models.CharField(max_length=120, null=True, default='Unnamed Country')
     iso2 = models.CharField("2 Digit ISO", max_length=2, null=True, blank=True)
-    latitude = models.FloatField(validators=[MinValueValidator(-90), 
+    latitude = models.FloatField(validators=[MinValueValidator(-90),
                                              MaxValueValidator(90)],
-                                             null=True)
-    longitude = models.FloatField(validators=[MinValueValidator(-180), 
+                                 null=True)
+    longitude = models.FloatField(validators=[MinValueValidator(-180),
                                               MaxValueValidator(180)],
-                                              null=True)
+                                  null=True)
     tot_birds_count = models.IntegerField(null=True, default=1)
     tot_observations_events = models.IntegerField(null=True)
     is_exotic = models.BooleanField(null=True)

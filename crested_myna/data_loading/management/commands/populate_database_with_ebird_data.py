@@ -10,6 +10,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 directory = os.getcwd()
 
+
 class Command(BaseCommand):
     """
     Command to populate the ACRecord table with the data from the csv file.

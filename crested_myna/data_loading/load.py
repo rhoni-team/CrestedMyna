@@ -1,5 +1,5 @@
-""" Module to load the world shapefile into the database 
-This module uses the LayerMapping class from django.contrib.gis.utils 
+""" Module to load the world shapefile into the database
+This module uses the LayerMapping class from django.contrib.gis.utils
 to load the world shapefile into the database.
 Only the relevant attributes columns are loaded into the database.
 """
@@ -17,7 +17,8 @@ country_mapping = {
 }
 
 # path to the world shapefile
-WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
+WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / \
+    "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
 
 
 def run(verbose=True):

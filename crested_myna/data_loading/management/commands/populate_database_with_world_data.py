@@ -13,6 +13,7 @@ from django.db.models import Count
 
 directory = os.getcwd()
 
+
 class Command(BaseCommand):
     """
     Command to populate the Country table with the data from the world shapefile.
@@ -40,7 +41,7 @@ class Command(BaseCommand):
 
         except Country.DoesNotExist:
             raise CommandError('Country object does not exist')
-        
+
     def save_world_shp_in_database(self):
         """ Save the world shapefile in the database """
         run()

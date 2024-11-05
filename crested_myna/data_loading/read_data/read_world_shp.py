@@ -4,7 +4,8 @@ from django.contrib.gis.gdal import DataSource
 import data_loading
 
 
-WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
+WORLD_SHP_PATH = Path(data_loading.__file__).resolve().parent / "data" / \
+    "countries_data" / "world_shp" / "TM_WORLD_BORDERS-0.3.shp"
 
 
 class ReadWorldShp:

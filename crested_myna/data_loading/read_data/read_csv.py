@@ -31,7 +31,7 @@ class RecordsFromCsv():
         This method is used to convert the nan values to none.
         """
         return in_df.where(pd.notnull(in_df), None)
-    
+
     def fill_year_from_date(self, in_df: pd.DataFrame):
         """
         This method is used to fill the year from the observation_date.
@@ -47,12 +47,11 @@ class RecordsFromCsv():
         in_df['location'] = in_df.apply(
             lambda row: [row['latitude'], row['longitude']], axis=1)
         return in_df
-    
+
     def get_rows_list(self):
         """
         This method is used to get the rows list from the csv file.
         """
         self.AC_data = self.AC_data.to_dict(orient='index')
-        AC_data_rows = [v for k,v in self.AC_data.items()]
+        AC_data_rows = [v for k, v in self.AC_data.items()]
         return AC_data_rows
-    

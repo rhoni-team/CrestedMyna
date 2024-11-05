@@ -84,7 +84,7 @@ ROOT_URLCONF = 'crested_myna.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ 
+        'DIRS': [
             BASE_DIR / 'templates',
             BASE_DIR / 'mapping/templates',
         ],
@@ -160,15 +160,13 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is where collectstatic will put files for production use
 
 # Directories to look for static files during development
-STATICFILES_DIRS = [ 
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'mapping', 'static', 'mapping'),
 ]
 
 # Optional: Enable optimization for static files (production)
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
-
 
 
 # Default primary key field type
@@ -195,5 +193,5 @@ if ENVIRONMENT == 'production':
     CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
     SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 10 # It will be blocked for 10 seconds.
+    SECURE_HSTS_SECONDS = 10  # It will be blocked for 10 seconds.
     SECURE_HSTS_PRELOAD = True
