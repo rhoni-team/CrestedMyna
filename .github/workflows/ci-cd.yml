@@ -69,9 +69,9 @@ jobs:
       run: |
         make lint VENV_FOLDER=./.venv
 
-    # - name: Run Tests
-    #   run: |
-    #     make test VENV_FOLDER=./.venv
+    - name: Run Tests
+      run: |
+        make test VENV_FOLDER=./.venv
 
   cd:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
