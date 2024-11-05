@@ -5,8 +5,8 @@ Only the relevant attributes columns are loaded into the database.
 """
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from .models import Country
 import data_loading
+from data_loading.models import Country
 
 
 # map object with the selected columns

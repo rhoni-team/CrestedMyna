@@ -1,6 +1,7 @@
 """ Tests for the data_analysis app """
-from django.test import TestCase
 from pathlib import Path
+from django.test import TestCase
+
 import data_loading
 from data_loading.read_data.read_world_shp import ReadWorldShp
 
