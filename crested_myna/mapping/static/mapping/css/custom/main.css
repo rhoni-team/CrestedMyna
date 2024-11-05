@@ -1,0 +1,8 @@
+/* main.css */
+
+@import url('header.css');
+@import url('global_map.css');
+
+.leaflet-map-pane canvas {
+    z-index: 200 !important;
+}

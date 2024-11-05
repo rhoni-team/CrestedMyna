@@ -1,0 +1,36 @@
+/* global_map.css */
+
+.global-map {
+    height: 600px;
+    width: 100%;
+}
+
+.legend-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.legend {
+    padding: 6px 8px;
+    background: white;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.legend h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.legend div {
+    line-height: 24px;
+}
+
+.gradient-violet {
+    background: linear-gradient(to right, #bcbddc, #54278f, #3f007d);
+    border: 1px solid #ccc;
+}

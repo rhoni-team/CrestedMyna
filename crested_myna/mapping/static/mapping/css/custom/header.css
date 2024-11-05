@@ -1,0 +1,11 @@
+/* header.css */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px; /* Ensure this matches the inline style */
+    padding: 0px;
+    background-color: #013a74;
+    color: #fff;
+}
