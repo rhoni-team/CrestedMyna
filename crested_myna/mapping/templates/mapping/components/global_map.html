@@ -13,8 +13,6 @@
 
 {% block js %}
     <script src="{% static 'mapping/js/leaflet/leaflet.js' %}"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
     <script type="module" src="{% static 'mapping/js/mapping/plot_points.js' %}"></script>
     <script type="module">
         import { getAllPoints, getCountriesPolygonsWithACRecords } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
@@ -28,26 +26,10 @@
         // add openstreetmap layer
         addTile(baseMap);
 
-        // get geopoints cases from REST API
-        {% comment %} async function getRecords() {
-            console.log("entra get records funcion")
-            try {
-              let response = await getAllPoints();
-              let geopoints = await response;
-              return geopoints
-            } catch(err) {
-              if (err.response) {
-                console.error('error: ', err.response.status);
-              }
-            }
-          } {% endcomment %}
-
-        
-          async function getPolygons() {
+         async function getPolygons() {
             try {
               let response = await getCountriesPolygonsWithACRecords();
               let countries_polygons = await response;
-              console.log(countries_polygons)
               return countries_polygons
             } catch(err) {
               if (err.response) {
@@ -60,13 +42,21 @@
         polygons = await getPolygons();
         const polygonLayer = L.geoJson(JSON.parse(polygons), {style: styleCountries});
         baseMap.addLayer(polygonLayer);
-        window.mapa = baseMap;
-        let records;
-        {% comment %} records = await getRecords();
-        const heatLayer = createHeatmapLayer(records, baseMap);
-        baseMap.addLayer(heatLayer);
-        window.heatLayer = heatLayer;
-        baseMap.setZoom(2, { animate: true }); {% endcomment %}
+        
+        // create legend
+        const legend = L.control({ position: "bottomright" });
+
+        legend.onAdd = function (map) {
+          const div = L.DomUtil.create("div", "legend");
+          div.innerHTML += "<h4>Crested Myna Distribution</h4>";
+          div.innerHTML += '<div><span class="legend-box" style="background: #2E8B57"></span> Native Range</div>';
+          div.innerHTML += '<div><span class="legend-box gradient-violet"></span> Exotic Range</div>';
+
+          return div;
+        };
+
+        // Add the legend to the map
+        legend.addTo(baseMap);
 
     </script>
 {% endblock %}
