@@ -1,7 +1,7 @@
+""" Tests for the mapping app """
 from django.test import TestCase
-from data_loading.read_data.read_world_shp import ReadWorldShp
-from mapping.views import GetCountriesPolygonsWithACRecords
 from django.core.management import call_command
+from mapping.views import GetCountriesPolygonsWithACRecords
 
 
 # Test the ReadWorldShp class
@@ -11,7 +11,9 @@ class TestGetCountriesPolygons(TestCase):
     @staticmethod
     def setUpTestData():
         """Set up the test data"""
-        call_command('migrate', 'data_loading')
+        call_command('migrate', 'data_loading', '0001_initial', '--fake')
+        call_command('populate_test_db_with_mocked_data')
+        call_command('populate_database_with_world_data')
 
     def setUp(self):
         """ Set up the test """
