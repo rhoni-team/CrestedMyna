@@ -4,15 +4,17 @@ This module contains the class RecordsFromCsv, which is used to read the csv fil
 
 import pandas as pd
 
+ebird_records_path = "./data_loading/data/ebird_data/crested_myna_records.csv"
+
 
 class RecordsFromCsv():
     """
     read the csv file containing the data of the AC records.
     """
 
-    def __init__(self):
+    def __init__(self, path_csv: str = ebird_records_path):
         """initialize the class"""
-        self.path_csv = "./data_loading/data/ebird_data/crested_myna_records.csv"
+        self.path_csv = path_csv
         self.AC_data = self.read_csv()
 
     def read_csv(self):
