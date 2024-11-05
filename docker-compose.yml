@@ -7,6 +7,7 @@ services:
     expose:
       - "8000"
     volumes:
+      - ./crested_myna:/crested_myna
       - nginx_reverse_proxy_certbot-etc:/etc/letsencrypt
       - nginx_reverse_proxy_certbot-var:/var/lib/letsencrypt
     command: gunicorn crested_myna.wsgi:application --bind 0.0.0.0:8000            
@@ -18,6 +19,7 @@ services:
       - shared_network
     restart: unless-stopped
 volumes:
+  ./crested_myna:
   nginx_reverse_proxy_certbot-etc:
     external: true
   nginx_reverse_proxy_certbot-var:
