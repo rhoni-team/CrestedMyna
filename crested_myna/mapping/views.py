@@ -1,5 +1,6 @@
 """Main View to load Vue app in Django html template"""
 from typing import List
+import json
 
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
@@ -8,8 +9,6 @@ from django.core.serializers import serialize
 
 from data_loading.models import ACRecord
 from data_loading.models import CountryWithACRecord
-
-import json
 
 
 class IndexTemplateView(TemplateView):
@@ -28,16 +27,14 @@ class GetRecords(View):
     """Get records from the database"""
 
     def get(self, request):
-
+        """Get records response for ajax request"""
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
         if is_ajax:
             records = ACRecord.objects.values_list('location', flat=True)
             response = JsonResponse({"records": list(records)})
             return response
-
-        else:
-            return HttpResponseBadRequest('Invalid request')
+        return HttpResponseBadRequest('Invalid request')
 
 
 class GetCountriesPolygonsWithACRecords(View):
@@ -48,7 +45,8 @@ class GetCountriesPolygonsWithACRecords(View):
         countries_pol = CountryWithACRecord.objects.all()
         return countries_pol
 
-    def serialize_countries_polygons_as_geojson(self, countries_polygons: List["CountryWithACRecord"]) -> str:
+    def serialize_countries_polygons_as_geojson(
+            self, countries_polygons: List["CountryWithACRecord"]) -> str:
         """Serialize countries polygons as geojson"""
         geojson = serialize('geojson', countries_polygons)
 
@@ -67,5 +65,4 @@ class GetCountriesPolygonsWithACRecords(View):
             geojson_pol = self.serialize_countries_polygons_as_geojson(countries_polygons)
             response = JsonResponse({"countries": geojson_pol})
             return response
-        else:
-            return HttpResponseBadRequest('Invalid request')
+        return HttpResponseBadRequest('Invalid request')
