@@ -1,7 +1,7 @@
 """ Tests for the mapping app """
 from django.test import TestCase
 from django.core.management import call_command
-from mapping.views import GetCountriesPolygonsWithACRecords
+from mapping.views.views_get_data import GetCountriesPolygonsWithACRecords
 
 
 # Test the ReadWorldShp class
