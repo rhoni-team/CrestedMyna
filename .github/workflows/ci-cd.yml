@@ -73,49 +73,49 @@ jobs:
     #   run: |
     #     make test VENV_FOLDER=./.venv
 
-  cd:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # cd:
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-    permissions:
-      id-token: write
-      contents: write
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.11"]
+  #   permissions:
+  #     id-token: write
+  #     contents: write
 
-    steps:
-    - name: Check-out repository
-      uses: actions/checkout@v3
-      with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+  #   steps:
+  #   - name: Check-out repository
+  #     uses: actions/checkout@v3
+  #     with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         fetch-depth: 0
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
     
-    - name: Install dependencies
-      uses: actions/cache@v2
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
-        restore-keys: venv-${{ runner.os }}-
+  #   - name: Install dependencies
+  #     uses: actions/cache@v2
+  #     with:
+  #       path: .venv
+  #       key: venv-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
+  #       restore-keys: venv-${{ runner.os }}-
 
-    - name: Build virtual environment if necessary
-      run: python -m venv ./.venv && . ./.venv/bin/activate &&
-           pip install --upgrade pip &&
-           pip install -r requirements.txt
-      if: steps.cache-venv.outputs.cache-hit != 'true'
+  #   - name: Build virtual environment if necessary
+  #     run: python -m venv ./.venv && . ./.venv/bin/activate &&
+  #          pip install --upgrade pip &&
+  #          pip install -r requirements.txt
+  #     if: steps.cache-venv.outputs.cache-hit != 'true'
 
-    - name: Semantic Release
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        source ./.venv/bin/activate;
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        semantic-release version
-        semantic-release changelog
-        semantic-release publish
+  #   - name: Semantic Release
+  #     env:
+  #       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       source ./.venv/bin/activate;
+  #       git config user.name github-actions
+  #       git config user.email github-actions@github.com
+  #       semantic-release version
+  #       semantic-release changelog
+  #       semantic-release publish
