@@ -13,7 +13,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('data_loading', '0005_sql_update_point_field_as_geom'),
+        ('data_loading', '0007_sql_update_point_field_as_geom'),
     ]
 
     operations = [
@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
             SELECT DISTINCT ON (ac.country_code) 
                 ct.name,
                 ac.country_code,
-                ct.geom
-            FROM data_loading_acrecord ac, data_loading_country ct 
+                ct.simple_geom as geom
+            FROM data_loading_acrecord ac, data_loading_countrysimplified ct 
             WHERE ct.iso2 = ac.country_code;
 
             -- Update the total observations events of the bird for each country
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
 
             UPDATE data_loading_countrywithacrecord AS ct
             SET is_exotic = CASE
-                WHEN iso2 NOT IN ('CN', 'TW', 'MM', 'LA', 'VN') THEN TRUE
+                WHEN iso2 NOT IN ('CN', 'MM', 'LA', 'VN') THEN TRUE
                 ELSE FALSE
             END;
 

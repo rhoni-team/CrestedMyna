@@ -10,7 +10,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('data_loading', '0004_sql_update_acrecord_observations_count'),
+        ('data_loading', '0006_sql_update_acrecord_observations_count'),
     ]
 
     operations = [

@@ -12,7 +12,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('data_loading', '0003_add_world_shapefile_data'),
+        ('data_loading', '0005_postgis_simplify_polygons'),
     ]
 
     operations = [
