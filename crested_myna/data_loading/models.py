@@ -51,6 +51,19 @@ class Country(models.Model):
         return self.name if self.name else "Unnamed Country"
 
 
+class CountrySimplified(models.Model):
+    """ 
+    Model for the world borders simplified after applying ST_Simplify with a 0.01 tolerance.
+    """
+    name = models.CharField(max_length=120, null=True, default='Unnamed Country')
+    iso2 = models.CharField("2 Digit ISO", max_length=2, null=True, blank=True)
+    simple_geom = models.MultiPolygonField(null=True)
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.name if self.name else "Unnamed Country"
+
+
 class CountryWithACRecord(models.Model):
     """ Country model with only the countries that have AC records. """
     name = models.CharField(max_length=120, null=True, default='Unnamed Country')
