@@ -3,22 +3,62 @@
 {% load static %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'mapping/css/custom/main.css' %}">
+<link rel="stylesheet" href="{% static 'mapping/css/custom/main.css' %}">
 {% endblock %}
 
 {% block content %}
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Spatial Analysis</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto">
+            <h1 class="text-center m-4 m-md-4 m-lg-5">Spatial analysis</h1>
+            <div class="row">
+                <h3 class="text-left m-4 m-md-4 m-lg-5">Preprocessing</h3>
+                
+            <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                <img src="{% static 'mapping/img/ilustration_map.png' %}" alt="Crested Myna" 
+                    class="float-end m-2"
+                    style="max-width: 100%; height: auto;">
+                    The eBird data for the Crested Myna was filtered and tidied using the AUK package in R. 
+                    The code used for this process is available in our repository 
+                    <a href="https://github.com/rhoni-team/Crested_Myna_Data_Analysis" target="_blank">
+                        <em>Crested Myna Data Analysis</em></a>.
+                        Once the data was preprocessed, it was further analyzed to understand the distribution of 
+                        the species across different countries. This involved spatially joining eBird observations
+                        with country polygons to calculate the number of bird observations in each 
+                        country over time. Additionally, each country with Crested Myna sightings was 
+                        categorized as either part of the species' native range or outside of it, 
+                        according information from <a href="#bibliography">bibliography</a>.
+            </p>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="{% static 'mapping/img/screenshot.png' %}" alt="Screenshot">
+            <div class="row">
+                <h3 class="text-left m-4 m-md-4 m-lg-5">Spatial processing of country polygons</h3>
+                <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                    The country polygon layer was initially processed with PostGIS to ensure all geometries were 
+                    <a href="https://postgis.net/workshops/postgis-intro/validity.html" target="_blank">
+                        valid</a>. After validation, the polygons were simplified to reduce geometric complexity,
+                        optimizing the data for spatial analysis without sacrificing significant detail.
+                </p>
             </div>
         </div>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-10 col-lg-8 mx-auto">
+        <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+            <span class="small fw-bold" id="bibliography">Bibliography:</span>
+        <ul class="small">
+            <li>Scheffer, Theo H. and Cottam, Clarence, 1935. "The Crested Myna, or Chinese Starling, in the Pacific
+                Northwest," Technical Bulletins 164532, United States Department of Agriculture, Economic Research
+                Service.</li>
+        </ul>
+        <ul class="small">
+            <li>Feare, C. J. and Craig, A. D. F. K. 1998. Starlings and mynas. Christopher Helm, London.</li>
+        </ul>
+            </p>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
 
