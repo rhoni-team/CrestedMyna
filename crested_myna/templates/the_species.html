@@ -3,22 +3,60 @@
 {% load static %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'mapping/css/custom/main.css' %}">
+<link rel="stylesheet" href="{% static 'mapping/css/custom/main.css' %}">
 {% endblock %}
 
 {% block content %}
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Crested Myna</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto">
+            <h1 class="text-center m-4 m-md-4 m-lg-5">Crested Myna</h1>
+            <div class="text-center">
+                <img src="{% static 'mapping/img/estornino_crestado_jk.jpeg' %}" alt="Crested Myna" 
+                    class="img-fluid rounded m-md-3 m-lg-4 mb-3"
+                    style="max-width: 100%; height: auto;">
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="{% static 'mapping/img/screenshot.png' %}" alt="Screenshot">
-            </div>
+            <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                The Crested Myna or Chinese Starling (Acridotheres cristatellus) is a bird mostly black black plumage,
+                with a conspicuous frontal
+                crest and white wing patches. It is a member of the family Sturnidae, which includes other mynas such as
+                the Common Myna (Sturnus vulgaris).
+            </p>
+            <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                The Crested Myna is native to China, Laos, Myanmar, Burma and Vietnam.
+                They prefer open habitats as agricultural lands, and urban areas.
+            </p>
+            <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                This species was introduced on many countries for several reasons. In some cases, it was introduced as a
+                pest control,
+                like in the case of Philippines, or as a cage bird that was later released or that could scape, like in
+                the case of Canada. In some countries it is currently well stablish. In Argentina,
+                for example, flocks of hundreds of birds can be found near La Plata river.
+            </p>
+            <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                In this project we analyzed the the distribution of this species around the world,
+                and present statistics and spatial analysis to have some insights about
+                its expansion and colonization.
+            </p>
         </div>
     </div>
-{% endblock %}
 
+    <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto">
+        <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+            <span class="small fw-bold">Bibliography:</span>
+        <ul class="small">
+            <li>Scheffer, Theo H. and Cottam, Clarence, 1935. "The Crested Myna, or Chinese Starling, in the Pacific
+                Northwest," Technical Bulletins 164532, United States Department of Agriculture, Economic Research
+                Service.</li>
+        </ul>
+        <ul class="small">
+            <li>Feare, C. J. and Craig, A. D. F. K. 1998. Starlings and mynas. Christopher Helm, London.</li>
+        </ul>
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
