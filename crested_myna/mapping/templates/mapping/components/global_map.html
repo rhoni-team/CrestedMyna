@@ -8,6 +8,7 @@
 {% endblock %}
 
 <div class="container p-3">
+  <h1 class="text-center m-4 m-md-4 m-lg-5">Crested Myna - Distribution Map</h1>
     <div id="global-map" class="global-map"></div>
     <div id="global-map-charts" class="row">
         <div id="echarts-barplot-observations" class="col echarts-container" style="width: 45%; height: 400px;"></div>
@@ -25,13 +26,83 @@
         import { createHeatmapLayer } from "{% static 'mapping/js/mapping/heat_map.js' %}";
         import { styleCountries } from "{% static 'mapping/js/mapping/country_polygons.js' %}";
 
+        const plotBarChart = function (x, y, title, elementId) {
+          const chartContainer = document.getElementById(elementId);
+          const chart = echarts.init(chartContainer);
+          const options = {
+            title: {
+              text: title,
+              left: 'left',
+              top: '20',
+              textStyle: {
+                fontSize: 15,
+                fontWeight: 'bold'
+              }
+            },
+            grid: {
+              top: 60,
+              bottom: 40,
+              left: 40,
+              right: 40
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            yAxis: {
+              type: 'value'
+            },
+            xAxis: {
+              type: 'category',
+              data: x
+            },
+            series: [{
+              data: y,
+              type: 'bar',
+              showBackground: true,
+              backgroundStyle: {
+                color: 'rgba(180, 180, 180, 0.2)'
+              }
+            }]
+          };
+          chart.setOption(options);
+        }
+
+
+        const scrollToBottom = function() {
+          document.getElementById('global-map-charts').scrollIntoView({
+              behavior: 'smooth'
+          });
+      }
+
+        const firstPlot = async function() {
+          const response = await getCountryDetails("AR");
+          const observationCounts = response.map(item => item.event_count);
+          const birdsCounts = response.map(item => item.observation_count);
+          const years = response.map(item => item.year);
+          plotBarChart(
+            years,
+            observationCounts,
+            'Argentina - Observations by Year',
+            'echarts-barplot-observations'
+          );
+          plotBarChart(
+            years,
+            birdsCounts,
+            'Argentina - Birds Counts by Year',
+            'echarts-barplot-birds-counts'
+          );
+          scrollToBottom();
+        }
         // Wrap everything in an async initialization function
         async function initMap() {
             // create base map with zoom constraints
             var baseMap = createMap('global-map', [25, 0], 1.8, {
-                minZoom: 1.8,  // Prevent zooming out further than initial zoom
-                maxZoom: 18    // Standard maximum zoom level
+              zoom: 1.8,
+              minZoom: 1.8,  // Prevent zooming out further than initial zoom
+              maxZoom: 18    // Standard maximum zoom level
             });
+            baseMap.setMinZoom(1.8);
+            baseMap.setMaxZoom(4);
 
             // add openstreetmap layer
             addTile(baseMap);
@@ -75,55 +146,6 @@
                         .openOn(baseMap);
                 });
             });
-
-            const plotBarChart = function (x, y, title, elementId) {
-              const chartContainer = document.getElementById(elementId);
-              const chart = echarts.init(chartContainer);
-              const options = {
-                title: {
-                  text: title,
-                  left: 'left',
-                  top: '20',
-                  textStyle: {
-                    fontSize: 15,
-                    fontWeight: 'bold'
-                  }
-                },
-                grid: {
-                  top: 60,
-                  bottom: 40,
-                  left: 40,
-                  right: 40
-                },
-                tooltip: {
-                  trigger: 'axis'
-                },
-                yAxis: {
-                  type: 'value'
-                },
-                xAxis: {
-                  type: 'category',
-                  data: x
-                },
-                series: [{
-                  data: y,
-                  type: 'bar',
-                  showBackground: true,
-                  backgroundStyle: {
-                    color: 'rgba(180, 180, 180, 0.2)'
-                  }
-                }]
-              };
-              chart.setOption(options);
-            }
-
-            const scrollToBottom = function() {
-                document.getElementById('global-map-charts').scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-
-
             polygonLayer.eachLayer(function (layer) {
               layer.on('click', async function (e) {
                 const countryCode = e.target.feature.properties.iso2;
@@ -132,7 +154,6 @@
                 const observationCounts = response.map(item => item.event_count);
                 const birdsCounts = response.map(item => item.observation_count);
                 const years = response.map(item => item.year);
-                console.log(response)
                 plotBarChart(
                   years,
                   observationCounts,
@@ -154,5 +175,6 @@
 
         // Call the initialization function
         initMap();
+        firstPlot();
     </script>
 {% endblock %}
