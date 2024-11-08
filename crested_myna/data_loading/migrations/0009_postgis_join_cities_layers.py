@@ -69,9 +69,16 @@ class Migration(migrations.Migration):
             ORDER BY lat, lon;
 
             -- Update the Cities model with the unique cities
-            INSERT INTO data_loading_cities(city_name, population, lat, lon, geom)
-            SELECT city_name, population, lat, lon, geom
+            INSERT INTO data_loading_cities(city_name, population, iso2, lat, lon, geom)
+            SELECT city_name, population, iso2, lat, lon, geom
             FROM unique_cities_second_filter;
+
+            -- Drop the temporary views
+            DROP VIEW unique_cities_second_filter;
+            DROP VIEW unique_cities_first_filter;
+            DROP VIEW world_cities_view;
+            DROP VIEW esri_cities_view;
+            DROP VIEW imb_cities_view;
             """
         )
     ]
