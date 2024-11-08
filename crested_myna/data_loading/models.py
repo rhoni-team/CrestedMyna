@@ -133,7 +133,7 @@ class CountryWithACRecord(models.Model):
         return self.name
 
 
-class CitiesWithACRecord(models.Model):
+class CitiesACExotic(models.Model):
     """
     Model for the cities.
     """
@@ -146,6 +146,7 @@ class CitiesWithACRecord(models.Model):
                                               MaxValueValidator(180)], null=True)
     buffer_radio = models.FloatField(null=True)
     geom = models.PointField(null=True, srid=3857)
+    buffer_geom = models.PolygonField(null=True, srid=3857)
 
     def __str__(self):
         """String representation of the CitiesWithACRecord model."""
