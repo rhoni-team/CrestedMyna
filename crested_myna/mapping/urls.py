@@ -3,26 +3,28 @@ from django.urls import path
 from mapping.views.views_load_templates import (HomeTemplateView,
                                                 AboutTheSpeciesTemplateView,
                                                 AboutTheSpatialAnalysisTemplateView)
-from mapping.views.views_get_data import GetRecords, GetCountriesPolygonsWithACRecords
+from mapping.views.views_get_data import GetRecords, GetCountriesPolygonsWithACRecords, GetCountryDetails
 
 urlpatterns_load_templates = [
     path('', HomeTemplateView.as_view(), name='home'),
 
-    path('about-the-species/', 
+    path('about-the-species/',
          AboutTheSpeciesTemplateView.as_view(),
          name='about-the-species'),
 
-    path('about-the-spatial-analysis/', 
+    path('about-the-spatial-analysis/',
          AboutTheSpatialAnalysisTemplateView.as_view(),
          name='about-the-spatial-analysis'),
 ]
 
 urlpatterns_get_data = [
     path('get-records/', GetRecords.as_view(), name='get-records'),
-
     path('get-countries-polygons/',
          GetCountriesPolygonsWithACRecords.as_view(),
          name='get-countries-polygons'),
+    path('get-country-details/',
+         GetCountryDetails.as_view(),
+         name='get-country-details'),
 ]
 
 urlpatterns = urlpatterns_load_templates + urlpatterns_get_data
