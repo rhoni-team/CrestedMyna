@@ -8,55 +8,173 @@
 {% endblock %}
 
 <div class="container p-3">
+  <h1 class="text-center m-4 m-md-4 m-lg-5">Crested Myna - Distribution Map</h1>
     <div id="global-map" class="global-map"></div>
+    <div id="global-map-charts" class="row">
+        <div id="echarts-barplot-observations" class="col echarts-container" style="width: 45%; height: 400px;"></div>
+        <div id="echarts-barplot-birds-counts" class="col echarts-container" style="width: 45%; height: 400px;"></div>
+    </div>
 </div>
 
 {% block js %}
     <script src="{% static 'mapping/js/leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'mapping/js/echarts/echarts.min.js' %}"></script>
     <script type="module" src="{% static 'mapping/js/mapping/plot_points.js' %}"></script>
     <script type="module">
-        import { getAllPoints, getCountriesPolygonsWithACRecords } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
+        import { getAllPoints, getCountriesPolygonsWithACRecords, getCountryDetails } from "{% static 'mapping/js/ajax_calls/ajax_mapping.js' %}";
         import { createMap, addTile, addRecordsMarkers, createMarkerGroup } from "{% static 'mapping/js/mapping/plot_points.js' %}";
         import { createHeatmapLayer } from "{% static 'mapping/js/mapping/heat_map.js' %}";
         import { styleCountries } from "{% static 'mapping/js/mapping/country_polygons.js' %}";
 
-        // create base map
-        var baseMap = createMap('global-map', [25, 0], 1.8);
-
-        // add openstreetmap layer
-        addTile(baseMap);
-
-         async function getPolygons() {
-            try {
-              let response = await getCountriesPolygonsWithACRecords();
-              let countries_polygons = await response;
-              return countries_polygons
-            } catch(err) {
-              if (err.response) {
-                console.error('error: ', err.response.status);
+        const plotBarChart = function (x, y, title, elementId) {
+          const chartContainer = document.getElementById(elementId);
+          const chart = echarts.init(chartContainer);
+          const options = {
+            title: {
+              text: title,
+              left: 'left',
+              top: '20',
+              textStyle: {
+                fontSize: 15,
+                fontWeight: 'bold'
               }
-            }
-          }
+            },
+            grid: {
+              top: 60,
+              bottom: 40,
+              left: 40,
+              right: 40
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            yAxis: {
+              type: 'value'
+            },
+            xAxis: {
+              type: 'category',
+              data: x
+            },
+            series: [{
+              data: y,
+              type: 'bar',
+              showBackground: true,
+              backgroundStyle: {
+                color: 'rgba(180, 180, 180, 0.2)'
+              }
+            }]
+          };
+          chart.setOption(options);
+        }
 
-        let polygons;
-        polygons = await getPolygons();
-        const polygonLayer = L.geoJson(JSON.parse(polygons), {style: styleCountries});
-        baseMap.addLayer(polygonLayer);
-        
-        // create legend
-        const legend = L.control({ position: "bottomright" });
 
-        legend.onAdd = function (map) {
-          const div = L.DomUtil.create("div", "legend");
-          div.innerHTML += "<h4>Crested Myna Distribution</h4>";
-          div.innerHTML += '<div><span class="legend-box" style="background: #2E8B57"></span> Native Range</div>';
-          div.innerHTML += '<div><span class="legend-box gradient-violet"></span> Exotic Range</div>';
+        const scrollToBottom = function() {
+          document.getElementById('global-map-charts').scrollIntoView({
+              behavior: 'smooth'
+          });
+      }
 
-          return div;
-        };
+        const firstPlot = async function() {
+          const response = await getCountryDetails("AR");
+          const observationCounts = response.map(item => item.event_count);
+          const birdsCounts = response.map(item => item.observation_count);
+          const years = response.map(item => item.year);
+          plotBarChart(
+            years,
+            observationCounts,
+            'Argentina - Observations by Year',
+            'echarts-barplot-observations'
+          );
+          plotBarChart(
+            years,
+            birdsCounts,
+            'Argentina - Birds Counts by Year',
+            'echarts-barplot-birds-counts'
+          );
+          scrollToBottom();
+        }
+        // Wrap everything in an async initialization function
+        async function initMap() {
+            // create base map with zoom constraints
+            var baseMap = createMap('global-map', [25, 0], 1.8, {
+              zoom: 1.8,
+              minZoom: 1.8,  // Prevent zooming out further than initial zoom
+              maxZoom: 18    // Standard maximum zoom level
+            });
+            baseMap.setMinZoom(1.8);
+            baseMap.setMaxZoom(4);
 
-        // Add the legend to the map
-        legend.addTo(baseMap);
+            // add openstreetmap layer
+            addTile(baseMap);
 
+            let polygons = await getCountriesPolygonsWithACRecords();
+            const polygonLayer = L.geoJson(JSON.parse(polygons), {style: styleCountries});
+            baseMap.addLayer(polygonLayer);
+
+            // create legend
+            const legend = L.control({ position: "bottomright" });
+
+            legend.onAdd = function (map) {
+              const div = L.DomUtil.create("div", "legend");
+              div.innerHTML += "<h4>Crested Myna Distribution</h4>";
+              div.innerHTML += '<div><span class="legend-box" style="background: #2E8B57"></span> Native Range</div>';
+              div.innerHTML += '<div><span class="legend-box gradient-violet"></span> Exotic Range</div>';
+
+              return div;
+            };
+            // Add hover event listener to polygons
+            polygonLayer.eachLayer(function (layer) {
+                layer.on('mouseover', function (e) {
+                    const properties = e.target.feature.properties;
+                    const countryName = properties.name;
+                    const birdCount = properties.tot_birds_count;
+                    const isExotic = properties.is_exotic;
+                    // Create popup content
+                    const popupContent = `
+                        <div>
+                            <h6>${countryName}</h6>
+                        </div>
+                    `;
+
+                    // Get the center of the polygon
+                    const center = layer.getCenter();
+
+                    // Bind and open popup at the center
+                    L.popup()
+                        .setLatLng(center)
+                        .setContent(popupContent)
+                        .openOn(baseMap);
+                });
+            });
+            polygonLayer.eachLayer(function (layer) {
+              layer.on('click', async function (e) {
+                const countryCode = e.target.feature.properties.iso2;
+                const response = await getCountryDetails(countryCode);
+                const countryName = e.target.feature.properties.name;
+                const observationCounts = response.map(item => item.event_count);
+                const birdsCounts = response.map(item => item.observation_count);
+                const years = response.map(item => item.year);
+                plotBarChart(
+                  years,
+                  observationCounts,
+                  `${countryName} - Observations by Year`,
+                  'echarts-barplot-observations'
+                );
+                plotBarChart(
+                  years,
+                  birdsCounts,
+                  `${countryName} - Birds Counts by Year`,
+                  'echarts-barplot-birds-counts'
+                );
+                scrollToBottom();
+              });
+            });
+            // Add the legend to the map
+            legend.addTo(baseMap);
+        }
+
+        // Call the initialization function
+        initMap();
+        firstPlot();
     </script>
 {% endblock %}
