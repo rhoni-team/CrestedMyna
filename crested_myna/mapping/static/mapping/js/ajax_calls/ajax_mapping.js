@@ -33,3 +33,21 @@ export function getCountriesPolygonsWithACRecords() {
         });
     });
 }
+
+export async function getCountryDetails(countryCode) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: `/get-country-details/`,
+            type: "GET",
+            dataType: "json",
+            data: { country_code: countryCode },
+            success: (data) => {
+                resolve(data.country_details);  // Resolve the Promise with the data
+            },
+            error: (error) => {
+                console.log(error);
+                reject(error);  // Reject the Promise with the error
+            }
+        });
+    });
+}

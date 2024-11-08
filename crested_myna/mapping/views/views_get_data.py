@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views import View
 from django.core.serializers import serialize
+from django.db.models import Count, Sum
 
 from data_loading.models import ACRecord
 from data_loading.models import CountryWithACRecord
@@ -22,6 +23,32 @@ class GetRecords(View):
             response = JsonResponse({"records": list(records)})
             return response
         return HttpResponseBadRequest('Invalid request')
+
+
+class GetCountryDetails(View):
+    """Get country details from the database"""
+    def get(self, request):
+        """Get country details response for ajax request"""
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            country_code = request.GET.get('country_code')
+            country_details = self.get_country_details(country_code)
+            return JsonResponse({"country_details": country_details})
+        return HttpResponseBadRequest('Invalid request')
+
+    def get_country_details(self, country_code):
+        """Get country details from the database"""
+        print(ACRecord.objects.filter(country_code=country_code))
+        print(country_code)
+        records_by_year = ACRecord.objects.filter(country_code=country_code)\
+            .values('year')\
+            .annotate(
+                event_count=Count('id', distinct=True),
+                observation_count=Sum('observation_count')
+            )
+        print(records_by_year)
+        return list(records_by_year)
 
 
 class GetCountriesPolygonsWithACRecords(View):
