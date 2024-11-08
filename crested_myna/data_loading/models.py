@@ -62,7 +62,8 @@ class CitiesIMB(models.Model):
                                              MaxValueValidator(90)], null=True)
     lon = models.FloatField(validators=[MinValueValidator(-180),
                                               MaxValueValidator(180)], null=True)
-    geom = models.PointField(null=True)
+    iso2 = models.CharField(max_length=2, null=True)
+    geom = models.PointField(null=True, srid=3857)
 
     def __str__(self):
         """String representation of the Country model."""
@@ -72,14 +73,14 @@ class CitiesEsri(models.Model):
     """
     Model for the world borders.
     """
-    fips_cntry = models.CharField(max_length=10, null=True)
+    iso2 = models.CharField(max_length=10, null=True)
     city_name = models.CharField(max_length=250, null=True)
     population = models.IntegerField(null=True)
     lat = models.FloatField(validators=[MinValueValidator(-90),
                                              MaxValueValidator(90)], null=True)
     lon = models.FloatField(validators=[MinValueValidator(-180),
                                               MaxValueValidator(180)], null=True)
-    geom = models.PointField(null=True)
+    geom = models.PointField(null=True, srid=3857)
 
     def __str__(self):
         """String representation of the Country model."""
