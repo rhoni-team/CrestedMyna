@@ -151,3 +151,15 @@ class CitiesACExotic(models.Model):
     def __str__(self):
         """String representation of the CitiesWithACRecord model."""
         return self.city_name if self.city_name else "Unnamed City"
+
+class CitiesACExotic4326(models.Model):
+    """
+    Model for the cities.
+    """
+    city_name = models.CharField(max_length=250, null=True)
+    iso2 = models.CharField(max_length=10, null=True)
+    geom = models.PolygonField(null=True, srid=4326)
+
+    def __str__(self):
+        """String representation of the CitiesWithACRecord model."""
+        return self.city_name if self.city_name else "Unnamed City"
