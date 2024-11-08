@@ -26,7 +26,7 @@ cities_imb_mapping = {
 }
 
 cities_esri_mapping = {
-    'fips_cntry': 'FIPS_CNTRY',
+    'iso2': 'FIPS_CNTRY',
     'city_name': 'CITY_NAME',
     'population': 'POP',
     'geom': 'POINT',
