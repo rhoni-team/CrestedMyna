@@ -59,10 +59,27 @@ class CitiesIMB(models.Model):
     city_name = models.CharField(max_length=250, null=True)
     population = models.IntegerField(null=True)
     lat = models.FloatField(validators=[MinValueValidator(-90),
-                                             MaxValueValidator(90)])
+                                             MaxValueValidator(90)], null=True)
     lon = models.FloatField(validators=[MinValueValidator(-180),
-                                              MaxValueValidator(180)])
-    geom = models.PointField()
+                                              MaxValueValidator(180)], null=True)
+    geom = models.PointField(null=True)
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.city_name if self.city_name else "Unnamed City"
+
+class CitiesEsri(models.Model):
+    """
+    Model for the world borders.
+    """
+    fips_cntry = models.CharField(max_length=10, null=True)
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    geom = models.PointField(null=True)
 
     def __str__(self):
         """String representation of the Country model."""
