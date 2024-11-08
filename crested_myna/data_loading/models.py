@@ -51,6 +51,24 @@ class Country(models.Model):
         return self.name if self.name else "Unnamed Country"
 
 
+class CitiesIMB(models.Model):
+    """
+    Model for the world borders.
+    """
+    genc1 = models.CharField(max_length=10, null=True)
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)])
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)])
+    geom = models.PointField()
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.city_name if self.city_name else "Unnamed City"
+
+
 class CountrySimplified(models.Model):
     """ 
     Model for the world borders simplified after applying ST_Simplify with a 0.01 tolerance.
