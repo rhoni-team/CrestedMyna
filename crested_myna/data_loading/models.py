@@ -92,6 +92,7 @@ class Cities(models.Model):
     """
     city_name = models.CharField(max_length=250, null=True)
     population = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
     lat = models.FloatField(validators=[MinValueValidator(-90),
                                              MaxValueValidator(90)], null=True)
     lon = models.FloatField(validators=[MinValueValidator(-180),
@@ -130,3 +131,22 @@ class CountryWithACRecord(models.Model):
     def __str__(self):
         """String representation of the CountryWithACRecord model."""
         return self.name
+
+
+class CitiesWithACRecord(models.Model):
+    """
+    Model for the cities.
+    """
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    buffer_radio = models.FloatField(null=True)
+    geom = models.PointField(null=True, srid=3857)
+
+    def __str__(self):
+        """String representation of the CitiesWithACRecord model."""
+        return self.city_name if self.city_name else "Unnamed City"
