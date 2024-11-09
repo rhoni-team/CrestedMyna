@@ -1,4 +1,5 @@
-# readme for crested myna data
+# Crested myna data
+
 The data of CrestedMyna is part of eBird database.
 To request data, you can do it at: https://science.ebird.org/en/use-ebird-data/download-ebird-data-products
 
