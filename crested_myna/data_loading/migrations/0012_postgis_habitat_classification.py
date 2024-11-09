@@ -27,35 +27,29 @@ class Migration(migrations.Migration):
                 sum(tot_birds_count) as tot_obs,
                 iso2
             FROM data_loading_countrywithacrecord
-            group by iso2;
+            WHERE is_exotic = TRUE
+            GROUP BY iso2;
 
-            -- Create a view with the rural observations
-            CREATE OR REPLACE VIEW rural_observations_view as
-            SELECT 
-                (tot.tot_obs - urb.urban_obs) as rural_obs,
-                tot.iso2
-            FROM tot_observations_view tot, urban_observations_view urb
-            WHERE tot.iso2 = urb.iso2;
-            
-            -- Create a view with the habitat observations
+            -- Create a left join between the total observations and the urban observations
             CREATE OR REPLACE VIEW habitat_observations_view AS
             SELECT 
                 tot.iso2,
                 tot.tot_obs,
-                COALESCE(urb.urban_obs, 0) as urban_obs,
-                COALESCE(rur.rural_obs, 0) as rural_obs
+                COALESCE(urb.urban_obs, 0) as urban_obs
             FROM tot_observations_view tot
-            LEFT JOIN urban_observations_view urb ON tot.iso2 = urb.iso2
-            LEFT JOIN rural_observations_view rur ON tot.iso2 = rur.iso2;
-            
-            -- Insert the views into the tables
-            INSERT INTO data_loading_urbanruralobservations (urban_obs, rural_obs, tot_obs, iso2)
+            LEFT JOIN urban_observations_view urb ON tot.iso2 = urb.iso2;
+
+            -- Insert the total observations and urban observations into the table
+            INSERT INTO data_loading_urbanruralobservations (urban_obs, tot_obs, iso2)
             SELECT 
                 urban_obs,
-                rural_obs,
                 tot_obs,
                 iso2
             FROM habitat_observations_view;
+            
+            -- Update the rural observations field
+            UPDATE data_loading_urbanruralobservations
+            SET rural_obs = tot_obs - urban_obs;
             """
         )
     ]
