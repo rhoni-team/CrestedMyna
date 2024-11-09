@@ -14,7 +14,7 @@ The ebird data used in this application was first read by using [R](https://www.
 
 ## PostGIS and PostgreSQL
 
-Data analysis, data processing and spatial analysis were performed mostly through SQL by using [PostGIS](https://postgis.net/) and [PostgreSQL](https://www.postgresql.org/). The code can be found in the [data_loading/migrations folder](.crested_myna/data_loading/migrations) of this repository.
+Data analysis, data processing and spatial analysis were performed mostly through SQL by using [PostGIS](https://postgis.net/) and [PostgreSQL](https://www.postgresql.org/). The code can be found in the [data_loading/migrations folder](./crested_myna/data_loading/migrations) of this repository.
 
 ## Django and Python
 
