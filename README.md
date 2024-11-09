@@ -1,6 +1,6 @@
 # CrestedMyna
 
-A web application to visualize the global expansion of the Crested Myna (Acridotheres cristatellus). You can view the live application at https://crestedmyna.rhonidev.com/.
+A web application to visualize the global expansion of the Crested Myna _(Acridotheres cristatellus)_. You can view the live application at https://crestedmyna.rhonidev.com/.
 
 Observations for the species were analyzed across the different countries where it was recorded and over time.
 
