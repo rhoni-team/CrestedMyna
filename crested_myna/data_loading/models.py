@@ -157,7 +157,7 @@ class BufferCitiesExotic4326(models.Model):
     Model for the cities.
     """
     iso2 = models.CharField(max_length=10, null=True)
-    geom = models.PolygonField(null=True, srid=4326)
+    geom = models.MultiPolygonField(null=True, srid=4326)
 
     def __str__(self):
         """String representation of the CitiesWithACRecord model."""
