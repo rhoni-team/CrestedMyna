@@ -1,71 +1,29 @@
 # CrestedMyna
 
-Web application to visualize Crested Myna expansion
+A web application to visualize the global expansion of the Crested Myna (Acridotheres cristatellus). You can view the live application at https://crestedmyna.rhonidev.com/.
 
+Observations for the species were analyzed across the different countries where it was recorded and over time.
 
-# Installation
+This species prefers open areas such as agricultural lands, parks and urban spaces. A spatial analysis was conducted to determine whether, outside its native range, this species occupies rural areas or remains within urban zones like other exotic species such as the house sparrow _(Passer domesticus)_.
 
-1. Clone the repository
+# Technologies
 
-2. Create a virtual environment
+## R
 
-3. Install the dependencies
+The ebird data used in this application was first read by using [R](https://www.r-project.org/). The code used for this process is available in our repository [Crested Myna Data Analysis](https://github.com/rhoni-team/Crested_Myna_Data_Analysis).
 
-```bash
-pip install -r requirements.txt
-```
-4. Create a `data` folder inside `data_analysis` folder
+## PostGIS and PostgreSQL
 
-```bash
-cd data_analysis
-mkdir data
-```
+Data analysis, data processing and spatial analysis were performed mostly through SQL by using [PostGIS](https://postgis.net/) and [PostgreSQL](https://www.postgresql.org/). The code can be found in the [data_loading/migrations folder](.crested_myna/data_loading/migrations) of this repository.
 
-5. Copy the `crested_myna_records.csv` file to the `data` folder (they are in the private crested_myna_data repository)
+## Django and Python
 
-6. Create a `.env.dev` file in the root folder and add the environment variables.
+This web application was developed on [Django](https://www.djangoproject.com/).
 
-```bash
-POSTGRES_DB="crested_myna"
-POSTGRES_USER="your_username"
-POSTGRES_PASSWORD="your_password"
-PG_HOST=127.0.0.1
-PG_PORT=5432
-DEBUG=true
-SECRET_KEY='django-insecure-something_random'
-DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
-DJANGO_CORS_ALLOWED_ORIGINS=http://localhost http://127.0.0.1
-```
+## Leaflet
 
-7. Create the database
+Spatial data visualizations were made by using [Leaflet](https://leafletjs.com/).
 
-name: crested_myna
-username: your_username
-password: your_password
+## eCharts
 
-8. Run migrations
-
-```bash
-python manage.py migrate
-```
-
-9. Populate the database by using a management command
-
-```bash
-python manage.py populate_database_with_ebird_data
-```
-
-# Usage
-
-1. Run the development server
-
-```bash
-python manage.py runserver
-```
-
-2. Open your web browser and navigate to `http://127.0.0.1:8000/`   
-
-
-# Notes
-
-1. You are going to see the home page.
+Data visualizations were made by using [EChartsJS](https://echartsjs.com/index.html).
