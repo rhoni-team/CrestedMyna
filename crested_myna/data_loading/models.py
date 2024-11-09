@@ -51,6 +51,55 @@ class Country(models.Model):
         return self.name if self.name else "Unnamed Country"
 
 
+class CitiesIMB(models.Model):
+    """
+    Model for the world borders.
+    """
+    genc1 = models.CharField(max_length=10, null=True)
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    iso2 = models.CharField(max_length=2, null=True)
+    geom = models.PointField(null=True, srid=3857)
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.city_name if self.city_name else "Unnamed City"
+
+class CitiesEsri(models.Model):
+    """
+    Model for the world borders.
+    """
+    iso2 = models.CharField(max_length=10, null=True)
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    geom = models.PointField(null=True, srid=3857)
+
+    def __str__(self):
+        """String representation of the Country model."""
+        return self.city_name if self.city_name else "Unnamed City"
+    
+class Cities(models.Model):
+    """
+    Model for the cities.
+    """
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    geom = models.PointField(null=True, srid=3857)
+
+
 class CountrySimplified(models.Model):
     """ 
     Model for the world borders simplified after applying ST_Simplify with a 0.01 tolerance.
@@ -82,3 +131,41 @@ class CountryWithACRecord(models.Model):
     def __str__(self):
         """String representation of the CountryWithACRecord model."""
         return self.name
+
+
+class CitiesACExotic(models.Model):
+    """
+    Model for the cities.
+    """
+    city_name = models.CharField(max_length=250, null=True)
+    population = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
+    lat = models.FloatField(validators=[MinValueValidator(-90),
+                                             MaxValueValidator(90)], null=True)
+    lon = models.FloatField(validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)], null=True)
+    buffer_radio = models.FloatField(null=True)
+    geom = models.PointField(null=True, srid=3857)
+    buffer_geom = models.PolygonField(null=True, srid=3857)
+
+    def __str__(self):
+        """String representation of the CitiesWithACRecord model."""
+        return self.city_name if self.city_name else "Unnamed City"
+
+class BufferCitiesExotic4326(models.Model):
+    """
+    Model for the cities.
+    """
+    iso2 = models.CharField(max_length=10, null=True)
+    geom = models.MultiPolygonField(null=True, srid=4326)
+
+    def __str__(self):
+        """String representation of the CitiesWithACRecord model."""
+        return self.city_name if self.city_name else "Unnamed City"
+
+class UrbanRuralObservations(models.Model):
+    """ View with the urban observations. """
+    urban_obs = models.IntegerField(null=True)  
+    rural_obs = models.IntegerField(null=True)
+    tot_obs = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
