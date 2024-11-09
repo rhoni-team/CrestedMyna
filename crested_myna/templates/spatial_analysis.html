@@ -13,12 +13,14 @@
         <div class="col-md-10 col-lg-8 mx-auto">
             <h1 class="text-center m-4 m-md-4 m-lg-5">Spatial analysis</h1>
             <div class="row">
+            <img src="{% static 'mapping/img/illustration_map.png' %}" alt="Crested Myna" 
+                    class="m-2"
+                    style="max-width: 100%; height: auto;">
+            </div>
+            <div class="row">
                 <h3 class="col-10 col-lg-8 text-left m-4 m-md-4 m-lg-5">Preprocessing</h3>
                 
             <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
-                <img src="{% static 'mapping/img/illustration_map.png' %}" alt="Crested Myna" 
-                    class="float-end m-2"
-                    style="max-width: 100%; height: auto;">
                     The eBird data for the Crested Myna was filtered and tidied using the AUK package in R. 
                     The code used for this process is available in our repository 
                     <a href="https://github.com/rhoni-team/Crested_Myna_Data_Analysis" target="_blank">
@@ -56,6 +58,25 @@
                     To ensure comprehensive coverage, a union operation was performed to combine
                     the layers into a single dataset. Duplicate entries were then identified and removed
                      based on both attribute values and spatial location.
+                </p>
+            </div>
+            <div class="row">
+                <h4 class="col-10 col-lg-8 text-left m-4 m-md-4 m-lg-5">Analysis of Preferred Habitat</h3>
+                <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                    This species prefers open areas such as agricultural lands, parks and urban spaces.
+                    A spatial analysis was conducted to determine whether, outside its native range,
+                    this species occupies rural areas or remains within urban zones like other exotic
+                    species such as the house sparrow <em>(Passer domesticus)</em>.
+                </p>
+                <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                    Urban areas worldwide were determined by creating variable-radius buffers around
+                    the city layer. Since the dataset includes only the major cities of the world,
+                    a minimum radius of 20 km and a maximum radius of 200 km were set based on the 
+                    population size of each city.
+                </p>
+                <p class="text-justify m-1 mb-2 mb-md-3 mb-lg-4">
+                    The species observations were then classified based on whether they were located
+                    within urban areas or not.
                 </p>
             </div>
         </div>
