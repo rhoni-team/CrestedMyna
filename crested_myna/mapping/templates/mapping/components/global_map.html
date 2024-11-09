@@ -11,8 +11,14 @@
   <h1 class="text-center m-4 m-md-4 m-lg-5">Crested Myna - Distribution Map</h1>
     <div id="global-map" class="global-map"></div>
     <div id="global-map-charts" class="row">
-        <div id="echarts-barplot-observations" class="col echarts-container" style="width: 45%; height: 400px;"></div>
-        <div id="echarts-barplot-birds-counts" class="col echarts-container" style="width: 45%; height: 400px;"></div>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div id="echarts-barplot-observations" class="echarts-container" style="height: 50vh;"></div>
+            </div>
+            <div class="col">
+                <div id="echarts-barplot-birds-counts" class="echarts-container" style="height: 50vh;"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -40,10 +46,7 @@
               }
             },
             grid: {
-              top: 60,
-              bottom: 40,
-              left: 40,
-              right: 40
+              top: 60
             },
             tooltip: {
               trigger: 'axis'
