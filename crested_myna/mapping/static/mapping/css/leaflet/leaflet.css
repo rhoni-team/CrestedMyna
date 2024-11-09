@@ -659,3 +659,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 		print-color-adjust: exact;
 		}
 	}
+
+.custom-popup {
+	opacity: 0.8 !important;
+}
+
+.leaflet-popup-tip-container {
+	display: none;
+}

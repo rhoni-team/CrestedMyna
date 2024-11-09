@@ -9,7 +9,7 @@ from django.db.models import Count, Sum
 
 from data_loading.models import ACRecord
 from data_loading.models import CountryWithACRecord
-
+from data_loading.models import UrbanRuralObservations
 
 class GetRecords(View):
     """Get records from the database"""
@@ -45,7 +45,9 @@ class GetCountryDetails(View):
                 event_count=Count('id', distinct=True),
                 observation_count=Sum('observation_count')
             )
-        return list(records_by_year)
+        # Join with UrbanRuralObservations to get urban/rural counts
+        observation_type = UrbanRuralObservations.objects.filter(iso2=country_code).values('urban_obs', 'rural_obs')
+        return {"records_by_year": list(records_by_year), "observation_type": list(observation_type)}
 
 
 class GetCountriesPolygonsWithACRecords(View):

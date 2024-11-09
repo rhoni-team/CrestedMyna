@@ -13,10 +13,29 @@
     <div id="global-map-charts" class="row">
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <div class="col">
-                <div id="echarts-barplot-observations" class="echarts-container" style="height: 50vh;"></div>
+                <div id="echarts-barplot-observations" class="echarts-container" style="height: 50vh; display: none;"></div>
+                <div id="echarts-barplot-observations-placeholder" class="echarts-container" style="height: 50vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; position: relative;">
+                    <img src="{% static 'mapping/img/estornino_crestado_jk.jpeg' %}" alt="Crested Myna"
+                         class="img-fluid rounded"
+                         style="position: absolute; height: 85%; opacity: 0.3;">
+                    <p class="text-muted text-center" style="position: relative; z-index: 1; font-weight: bolder;">
+                        Click on a country to see urban/rural observations data.
+                        <br>
+                        This data is <b>not available</b> for countries in which the Crested Myna is native
+                    </p>
+                </div>
             </div>
+
             <div class="col">
-                <div id="echarts-barplot-birds-counts" class="echarts-container" style="height: 50vh;"></div>
+                <div id="echarts-barplot-birds-counts" class="echarts-container" style="height: 50vh; display: none;"></div>
+                <div id="echarts-barplot-birds-counts-placeholder" class="echarts-container" style="height: 50vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; position: relative;">
+                    <img src="{% static 'mapping/img/estornino_crestado_jk.jpeg' %}" alt="Crested Myna"
+                         class="img-fluid rounded"
+                         style="position: absolute; height: 85%; opacity: 0.3;">
+                    <p class="text-muted text-center" style="position: relative; z-index: 1; font-weight: bolder;">
+                        Click on a country to see birds counts by year
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -32,77 +51,69 @@
         import { createHeatmapLayer } from "{% static 'mapping/js/mapping/heat_map.js' %}";
         import { styleCountries } from "{% static 'mapping/js/mapping/country_polygons.js' %}";
 
-        const plotBarChart = function (x, y, title, elementId) {
-          const chartContainer = document.getElementById(elementId);
-          const chart = echarts.init(chartContainer);
-          const options = {
-            title: {
-              text: title,
-              left: 'left',
-              top: '20',
-              textStyle: {
-                fontSize: 15,
-                fontWeight: 'bold'
-              }
-            },
-            grid: {
-              top: 60
-            },
-            tooltip: {
-              trigger: 'axis'
-            },
-            yAxis: {
-              type: 'value'
-            },
-            xAxis: {
-              type: 'category',
-              data: x
-            },
-            series: [{
-              data: y,
-              type: 'bar',
-              showBackground: true,
-              backgroundStyle: {
-                color: 'rgba(180, 180, 180, 0.2)'
-              }
-            }]
-          };
-          chart.setOption(options);
+        const togglePlaceholder = function (elementId, show) {
+          // Hide placeholder and show chart container
+          if (elementId === 'echarts-barplot-observations') {
+            document.getElementById('echarts-barplot-observations-placeholder').style.display = show ? 'none' : 'flex';
+            document.getElementById('echarts-barplot-observations').style.display = show ? 'block' : 'none';
+          } else if (elementId === 'echarts-barplot-birds-counts') {
+            document.getElementById('echarts-barplot-birds-counts-placeholder').style.display = show ? 'none' : 'flex';
+            document.getElementById('echarts-barplot-birds-counts').style.display = show ? 'block' : 'none';
+          }
         }
 
+        const plotBarChart = function (x, y, title, elementId) {
+
+            const chartContainer = document.getElementById(elementId);
+            const chart = echarts.init(chartContainer);
+            const options = {
+                title: {
+                    text: title,
+                    left: 'left',
+                    top: '20',
+                    textStyle: {
+                        fontSize: 15,
+                        fontWeight: 'bold'
+                    }
+                },
+                grid: {
+                    top: 60
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: x
+                },
+                series: [{
+                    data: y,
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }]
+            };
+            chart.setOption(options);
+        }
 
         const scrollToBottom = function() {
-          document.getElementById('global-map-charts').scrollIntoView({
-              behavior: 'smooth'
-          });
-      }
-
-        const firstPlot = async function() {
-          const response = await getCountryDetails("AR");
-          const observationCounts = response.map(item => item.event_count);
-          const birdsCounts = response.map(item => item.observation_count);
-          const years = response.map(item => item.year);
-          plotBarChart(
-            years,
-            observationCounts,
-            'Argentina - Observations by Year',
-            'echarts-barplot-observations'
-          );
-          plotBarChart(
-            years,
-            birdsCounts,
-            'Argentina - Birds Counts by Year',
-            'echarts-barplot-birds-counts'
-          );
-          scrollToBottom();
+            document.getElementById('global-map-charts').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
+
         // Wrap everything in an async initialization function
         async function initMap() {
             // create base map with zoom constraints
             var baseMap = createMap('global-map', [25, 0], 1.8, {
-              zoom: 1.8,
-              minZoom: 1.8,  // Prevent zooming out further than initial zoom
-              maxZoom: 18    // Standard maximum zoom level
+                zoom: 1.8,
+                minZoom: 1.8,  // Prevent zooming out further than initial zoom
+                maxZoom: 18    // Standard maximum zoom level
             });
             baseMap.setMinZoom(1.8);
             baseMap.setMaxZoom(4);
@@ -118,12 +129,12 @@
             const legend = L.control({ position: "bottomright" });
 
             legend.onAdd = function (map) {
-              const div = L.DomUtil.create("div", "legend");
-              div.innerHTML += "<h4>Crested Myna Distribution</h4>";
-              div.innerHTML += '<div><span class="legend-box" style="background: #2E8B57"></span> Native Range</div>';
-              div.innerHTML += '<div><span class="legend-box gradient-violet"></span> Exotic Range</div>';
+                const div = L.DomUtil.create("div", "legend");
+                div.innerHTML += "<h4>Crested Myna Distribution</h4>";
+                div.innerHTML += '<div><span class="legend-box" style="background: #2E8B57"></span> Native Range</div>';
+                div.innerHTML += '<div><span class="legend-box gradient-violet"></span> Exotic Range</div>';
 
-              return div;
+                return div;
             };
             // Add hover event listener to polygons
             polygonLayer.eachLayer(function (layer) {
@@ -132,6 +143,7 @@
                     const countryName = properties.name;
                     const birdCount = properties.tot_birds_count;
                     const isExotic = properties.is_exotic;
+
                     // Create popup content
                     const popupContent = `
                         <div>
@@ -139,38 +151,54 @@
                         </div>
                     `;
 
-                    // Get the center of the polygon
-                    const center = layer.getCenter();
+                    // Calculate popup position offset from cursor
+                    const point = e.containerPoint;
+                    const offset = point.x > window.innerWidth / 2 ? [-100, 0] : [100, 0];
 
-                    // Bind and open popup at the center
-                    L.popup()
-                        .setLatLng(center)
+                    // Bind and open popup with custom options
+                    L.popup({
+                        offset: offset,
+                        className: 'custom-popup',
+                    })
+                        .setLatLng(e.latlng)
                         .setContent(popupContent)
                         .openOn(baseMap);
                 });
             });
             polygonLayer.eachLayer(function (layer) {
-              layer.on('click', async function (e) {
-                const countryCode = e.target.feature.properties.iso2;
-                const response = await getCountryDetails(countryCode);
-                const countryName = e.target.feature.properties.name;
-                const observationCounts = response.map(item => item.event_count);
-                const birdsCounts = response.map(item => item.observation_count);
-                const years = response.map(item => item.year);
-                plotBarChart(
-                  years,
-                  observationCounts,
-                  `${countryName} - Observations by Year`,
-                  'echarts-barplot-observations'
-                );
-                plotBarChart(
-                  years,
-                  birdsCounts,
-                  `${countryName} - Birds Counts by Year`,
-                  'echarts-barplot-birds-counts'
-                );
-                scrollToBottom();
-              });
+                layer.on('click', async function (e) {
+                    const countryCode = e.target.feature.properties.iso2;
+                    const response = await getCountryDetails(countryCode);
+                    const countryName = e.target.feature.properties.name;
+                    const observationCounts = response.records_by_year.map(item => item.event_count);
+                    const birdsCounts = response.records_by_year.map(item => item.observation_count);
+                    const years = response.records_by_year.map(item => item.year);
+                    const observationType = response.observation_type[0];
+                    if (observationType) {
+                        togglePlaceholder('echarts-barplot-observations', true);
+                        plotBarChart(
+                            ['Urban', 'Rural'],
+                            [observationType.urban_obs, observationType.rural_obs],
+                            `${countryName} - Location (Urban/Rural)`,
+                            'echarts-barplot-observations'
+                        );
+                    } else {
+                        togglePlaceholder('echarts-barplot-observations', false);
+                    }
+                    if (birdsCounts) {
+                        togglePlaceholder('echarts-barplot-birds-counts', true);
+                        plotBarChart(
+                            years,
+                            birdsCounts,
+                            `${countryName} - Birds Counts by Year`,
+                            'echarts-barplot-birds-counts'
+                        );
+
+                    } else {
+                        togglePlaceholder('echarts-barplot-birds-counts', false);
+                    }
+                    scrollToBottom();
+                });
             });
             // Add the legend to the map
             legend.addTo(baseMap);
@@ -178,6 +206,5 @@
 
         // Call the initialization function
         initMap();
-        firstPlot();
     </script>
 {% endblock %}
