@@ -5,12 +5,12 @@ from data_loading.load import run
 
 
 def save_world_shp_in_database(apps, schema_editor):
-    """ Save the world shapefile in the database """
+    """ Save the world and cities shapefiles in the database """
     try:
         run()
-        print("\033[92mSuccessfully populated the database with the world shapefile\033[0m")
+        print("\033[92mSuccessfully populated the database with the world and cities shapefiles\033[0m")
     except Exception as e:
-        print(f"\033[91mError populating the database with the world shapefile: {e}\033[0m")
+        print(f"\033[91mError populating the database with the world and cities shapefiles: {e}\033[0m")
 
 
 class Migration(migrations.Migration):

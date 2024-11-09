@@ -39,15 +39,12 @@ class GetCountryDetails(View):
 
     def get_country_details(self, country_code):
         """Get country details from the database"""
-        print(ACRecord.objects.filter(country_code=country_code))
-        print(country_code)
         records_by_year = ACRecord.objects.filter(country_code=country_code)\
             .values('year')\
             .annotate(
                 event_count=Count('id', distinct=True),
                 observation_count=Sum('observation_count')
             )
-        print(records_by_year)
         return list(records_by_year)
 
 
