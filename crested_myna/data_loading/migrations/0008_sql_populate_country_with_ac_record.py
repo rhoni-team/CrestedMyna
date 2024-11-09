@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
 
             UPDATE data_loading_countrywithacrecord AS ct
             SET is_exotic = CASE
-                WHEN iso2 NOT IN ('CN', 'MM', 'LA', 'VN') THEN TRUE
+                WHEN iso2 NOT IN ('CN', 'MM', 'LA', 'VN', 'HK') THEN TRUE
                 ELSE FALSE
             END;
 
