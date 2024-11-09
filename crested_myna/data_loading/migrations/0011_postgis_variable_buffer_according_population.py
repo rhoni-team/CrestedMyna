@@ -20,13 +20,32 @@ class Migration(migrations.Migration):
             UPDATE data_loading_citiesacexotic
                 SET buffer_geom = ST_Buffer(geom, buffer_radio);
 
-            -- Transform the buffer_geom to 4326
-            INSERT INTO data_loading_citiesacexotic4326(city_name, iso2, geom)
-            SELECT 
-                city_name,
+            -- Create a view with the dissolved buffers
+            CREATE OR REPLACE VIEW dissolved_buffers_view AS
+            WITH dissolved AS (
+                SELECT
                 iso2,
-                ST_Transform(buffer_geom, 4326) AS geom
-            FROM data_loading_citiesacexotic;
+                ST_Union(buffer_geom) AS dissolved_geom
+            FROM
+                data_loading_citiesacexotic
+            GROUP BY
+                iso2
+            )
+            SELECT
+                iso2,
+                (ST_Dump(dissolved_geom)).geom AS dissolved_geom
+            FROM
+                dissolved;
+
+            -- Transform the buffer_geom to 4326
+            INSERT INTO data_loading_buffercitiesexotic4326(iso2, geom)
+            SELECT 
+                iso2,
+                ST_Transform(dissolved_geom, 4326) AS geom
+            FROM dissolved_buffers_view;
+
+            -- Drop the view
+            DROP VIEW dissolved_buffers_view;
             """
         )
     ]
