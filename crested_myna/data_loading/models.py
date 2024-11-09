@@ -162,3 +162,10 @@ class BufferCitiesExotic4326(models.Model):
     def __str__(self):
         """String representation of the CitiesWithACRecord model."""
         return self.city_name if self.city_name else "Unnamed City"
+
+class UrbanRuralObservations(models.Model):
+    """ View with the urban observations. """
+    urban_obs = models.IntegerField(null=True)  
+    rural_obs = models.IntegerField(null=True)
+    tot_obs = models.IntegerField(null=True)
+    iso2 = models.CharField(max_length=10, null=True)
